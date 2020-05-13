@@ -1,0 +1,9 @@
+AdminLTE-3.0.4
+
+server/.env
+
+node_modules
+
+client/node_modules
+
+server/node_modules

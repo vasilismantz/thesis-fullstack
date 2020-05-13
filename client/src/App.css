@@ -1,0 +1,74 @@
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+
+.App {
+  text-align: center;
+  font-size: 12px;
+}
+
+body {
+  font-size: 13px
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.table thead th{
+  backgroun: #515e73;
+}
+
+.table thead th:first-of-type{
+  border-top-left-radius: 10px; 
+}
+
+.table thead th:last-of-type{
+  border-top-right-radius: 10px; 
+}
+
+div.myDiv {
+  float: right;
+}
+div.myDiv:after {
+  /* clear floats is a good thing */
+  content: '';
+  display: block;
+  clear: both;
+}
+div.myDiv input {
+  float: right;
+  width: 150px;
+  margin-bottom: 3;
+  height: 26px
+}
