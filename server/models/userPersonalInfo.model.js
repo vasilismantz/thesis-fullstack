@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const UserPersonalInfo = sequelize.define("user_personal_info", {
       id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },

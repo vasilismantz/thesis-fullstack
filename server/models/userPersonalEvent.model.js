@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const UserPersonalEvent = sequelize.define("user_personal_event", {
       id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },

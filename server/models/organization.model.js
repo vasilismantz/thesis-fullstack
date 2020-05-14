@@ -2,12 +2,20 @@ module.exports = (sequelize, Sequelize) => {
     const Organization = sequelize.define("organization", {
       id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },
       organizationName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notEmpty: true
+        },
+        unique: {
+          args: 'organizationName',
+          msg: 'This Organizaiton Name is already taken!'
+        }
       },
       logo: {
         type: Sequelize.STRING,
@@ -15,7 +23,14 @@ module.exports = (sequelize, Sequelize) => {
       },
       emailAddress: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          isEmail: true
+        },
+        unique: {
+          args: 'email',
+          msg: 'The email is already taken!'
+       }
       },
       physicalAddress: {
         type: Sequelize.STRING,

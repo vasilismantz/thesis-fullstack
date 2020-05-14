@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const Expense = sequelize.define("expense", {
         id: {
             type: Sequelize.INTEGER,
+            autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },

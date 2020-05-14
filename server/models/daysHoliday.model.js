@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const DaysHoliday = sequelize.define("days_holiday", {
         id: {
             type: Sequelize.INTEGER,
+            autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },

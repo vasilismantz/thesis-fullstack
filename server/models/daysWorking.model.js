@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const DaysWorking = sequelize.define("days_working", {
         id: {
             type: Sequelize.INTEGER,
+            autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },

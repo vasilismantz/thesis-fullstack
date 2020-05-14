@@ -40,40 +40,40 @@ db.expense = require("./expense.model")(sequelize, Sequelize);
 
 
 //Organization Associations
-db.organization.hasMany(db.user)
-db.organization.hasMany(db.department)
-db.organization.hasMany(db.attendance)
-db.organization.hasMany(db.application)
-db.organization.hasMany(db.payment)
-db.organization.hasMany(db.expense)
-db.organization.hasMany(db.daysWorking)
-db.organization.hasMany(db.daysHoliday)
+db.organization.hasMany(db.user, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.department, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.attendance, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.application, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.payment, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.expense, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.daysWorking, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.daysHoliday, {foreignKey: {allowNull: false}})
 
 //User Associations
-db.user.hasOne(db.userPersonalInfo)
-db.user.hasOne(db.userFinancialInfo)
-db.user.hasMany(db.userPersonalEvent)
-db.user.hasMany(db.userMessage, {foreignKey: 'receiver'})
-db.user.hasMany(db.payment)
-db.user.hasMany(db.expense)
-db.user.hasMany(db.attendance)
-db.user.hasMany(db.jobHistory)
+db.user.hasOne(db.userPersonalInfo, {foreignKey: {allowNull: false}})
+db.user.hasOne(db.userFinancialInfo, {foreignKey: {allowNull: false}})
+db.user.hasMany(db.userPersonalEvent, {foreignKey: {allowNull: false}})
+db.user.hasMany(db.userMessage, {foreignKey: {name:'receiver', allowNull: false}})
+db.user.hasMany(db.payment, {foreignKey: {allowNull: false}})
+db.user.hasMany(db.expense, {foreignKey: {allowNull: false}})
+db.user.hasMany(db.attendance, {foreignKey: {allowNull: false}})
+db.user.hasMany(db.jobHistory, {foreignKey: {allowNull: false}})
 
 //Department Associations
 db.department.hasMany(db.user)
-db.department.hasMany(db.deptAnnouncement)
-db.department.hasMany(db.job)
+db.department.hasMany(db.deptAnnouncement, {foreignKey: {allowNull: false}})
+db.department.hasMany(db.job, {foreignKey: {allowNull: false}})
 
 //DeptAnnouncement Associations
-db.deptAnnouncement.belongsTo(db.user, {foreignKey: 'created_by_user_id'})
+db.deptAnnouncement.belongsTo(db.user, {foreignKey: {name:'created_by_user_id', allowNull: false}})
 
 //ApplicationType Associations
-db.applicationType.hasMany(db.application)
+db.applicationType.hasMany(db.application, {foreignKey: {allowNull: false}})
 
 //Job Associations
-db.job.hasMany(db.jobHistory)
+db.job.hasMany(db.jobHistory, {foreignKey: {allowNull: false}})
 
 //Message Associations
-db.userMessage.belongsTo(db.user, {foreignKey: 'sender'})
+db.userMessage.belongsTo(db.user, {foreignKey: {name:'sender', allowNull: false}})
 
 module.exports = db;

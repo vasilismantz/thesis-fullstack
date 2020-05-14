@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const DeptAnnouncement = sequelize.define("department_announcement", {
         id: {
             type: Sequelize.INTEGER,
+            autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },
