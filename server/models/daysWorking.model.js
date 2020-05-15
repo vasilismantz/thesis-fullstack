@@ -8,8 +8,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         day: {
             type: Sequelize.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
     }, {
         timestamps: false,

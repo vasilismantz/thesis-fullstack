@@ -48,6 +48,9 @@ db.organization.hasMany(db.payment, {foreignKey: {allowNull: false}})
 db.organization.hasMany(db.expense, {foreignKey: {allowNull: false}})
 db.organization.hasMany(db.daysWorking, {foreignKey: {allowNull: false}})
 db.organization.hasMany(db.daysHoliday, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.job, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.application, {foreignKey: {allowNull: false}})
+db.organization.hasMany(db.applicationType, {foreignKey: {allowNull: false}})
 
 //User Associations
 db.user.hasOne(db.userPersonalInfo, {foreignKey: {allowNull: false}})
@@ -65,7 +68,7 @@ db.department.hasMany(db.deptAnnouncement, {foreignKey: {allowNull: false}})
 db.department.hasMany(db.job, {foreignKey: {allowNull: false}})
 
 //DeptAnnouncement Associations
-db.deptAnnouncement.belongsTo(db.user, {foreignKey: {name:'created_by_user_id', allowNull: false}})
+db.deptAnnouncement.belongsTo(db.user, {foreignKey: {name: 'createdByUserId', allowNull: false}})
 
 //ApplicationType Associations
 db.applicationType.hasMany(db.application, {foreignKey: {allowNull: false}})

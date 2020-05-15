@@ -52,7 +52,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Organizations from the database.
 exports.findAll = (req, res) => {
-  Organization.findAll()
+  Organization.findAll({include: [{model: db.department, as: db.department.tablename}]})
     .then(data => {
       res.send(data);
     })

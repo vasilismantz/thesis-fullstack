@@ -8,8 +8,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         applicationType: {
             type: Sequelize.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
     }, {
         timestamps: false,
