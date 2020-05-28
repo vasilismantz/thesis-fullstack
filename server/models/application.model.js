@@ -22,6 +22,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.ENUM,
             values: ['approved', 'rejected', 'pending'],
             allowNull: false
+        },
+        type: {
+            type: Sequelize.ENUM,
+            values: ['normal', 'student', 'illness', 'marriage'],
+            allowNull: false
         }
     }, {
         timestamps: false,

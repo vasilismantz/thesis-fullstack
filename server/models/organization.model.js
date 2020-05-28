@@ -26,11 +26,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         validate: {
           isEmail: true
-        },
-        unique: {
-          args: 'email',
-          msg: 'The email is already taken!'
-       }
+        }
       },
       physicalAddress: {
         type: Sequelize.STRING,

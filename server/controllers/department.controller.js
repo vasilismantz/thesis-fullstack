@@ -45,22 +45,6 @@ exports.findAll = (req, res) => {
     });
 };
 
-//Retrieve all Departments By Organization Id
-exports.findAllByOrgId = (req, res) => {
-    const organizationId = req.params.id
-
-    Department.findAll({where: {organizationId: organizationId}})
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving departments."
-        });
-      });
-  };
-
 // Find a single Department with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
@@ -76,7 +60,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update an Department by the id in the request
+// Update a Department by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
 
@@ -142,22 +126,3 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
-
-// Delete all Departments by Organization Id.
-exports.deleteAllByOrgId = (req, res) => {
-    const organizationdId = req.params.id;
-
-    Department.destroy({
-      where: {organizationId: organizationdId},
-      truncate: false
-    })
-      .then(nums => {
-        res.send({ message: `${nums} Departments were deleted successfully!` });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while removing all Departments."
-        });
-      });
-  };

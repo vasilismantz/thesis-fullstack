@@ -10,6 +10,14 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
+        startingHour: {
+            type: Sequelize.STRING,
+            allowNull: false
+        }, 
+        endingHour: {
+            type: Sequelize.STRING,
+            allowNull: false
+        }
     }, {
         timestamps: false,
         underscored: true,

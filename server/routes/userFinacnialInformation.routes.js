@@ -1,33 +1,20 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require("../withAuth")
+
 const financialInformation = require("../controllers/userFinancialEvent.controller.js");
 
 // Create a new User Financial Information
-router.post('/', financialInformation.create);
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, financialInformation.create);
 
-//Retrieve all User Financial Informations 
-router.get('/', financialInformation.findAll);
+// Retrieve User Financial Information by User Id
+router.get('/user/:id', withAuth.verifyToken, financialInformation.findAllByUserId);
 
-//Retrieve all User Financial Informations by User Id
-router.get('/user/:id', financialInformation.findAllByUserId);
-
-//Retrieve a single User Financial Information with an id
-router.get('/:id', financialInformation.findOne);
+// Retrieve a single User Financial Information with an id
+router.get('/:id', withAuth.verifyToken, financialInformation.findOne);
 
 // Update a User Financial Information with an id
-router.put('/:id', financialInformation.update);
-
-// Delete a User Financial Information with an id
-router.delete('/:id', financialInformation.delete);
-
-// Delete all User Financial Informations
-router.delete('/', financialInformation.deleteAll);
-
-// Delete all User Financial Informations
-router.delete('/', financialInformation.deleteAll);
-
-// Delete all User Financial Informations by User Id
-router.delete('/user/:id', financialInformation.deleteAllByUserId);
+router.put('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, financialInformation.update);
 
 module.exports = router;

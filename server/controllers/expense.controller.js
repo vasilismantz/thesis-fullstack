@@ -18,8 +18,7 @@ exports.create = (req, res) => {
     expenseItemStore: req.body.expenseItemStore,
     date: req.body.date,
     amount: req.body.amount,
-    organizationId: req.body.organizationId,
-    userId: req.body.userId
+    departmentId: req.body.departmentId
   };
 
   // Save Expense in the database
@@ -49,27 +48,11 @@ exports.findAll = (req, res) => {
     });
 };
 
-//Retrieve all Expenses By Organization Id
-exports.findAllByOrgId = (req, res) => {
-    const organizationId = req.params.id
+//Retrieve all Expenses By Department Id
+exports.findAllByDeptId = (req, res) => {
+    const departmentId = req.params.id
 
-    Expense.findAll({where: {organizationId: organizationId}})
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving departments."
-        });
-      });
-  };
-
-//Retrieve all Expenses By User Id
-exports.findAllByUserId = (req, res) => {
-    const userId = req.params.id
-
-    Expense.findAll({where: {userId: userID}})
+    Expense.findAll({where: {departmentId: departmentId}})
       .then(data => {
         res.send(data);
       })
@@ -163,31 +146,12 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-// Delete all Expenses by Organization Id.
-exports.deleteAllByOrgId = (req, res) => {
-    const organizationdId = req.params.id;
+// Delete all Expenses by Department Id.
+exports.deleteAllByDeptId = (req, res) => {
+    const departmentId = req.params.id;
 
     Expense.destroy({
-      where: {organizationId: organizationdId},
-      truncate: false
-    })
-      .then(nums => {
-        res.send({ message: `${nums} Expenses were deleted successfully!` });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while removing all Expenses."
-        });
-      });
-  };
-
-// Delete all Expenses by User Id.
-exports.deleteAllByUserId = (req, res) => {
-    const userId = req.params.id;
-
-    Expense.destroy({
-      where: {userId: userId},
+      where: {departmentId: departmentId},
       truncate: false
     })
       .then(nums => {

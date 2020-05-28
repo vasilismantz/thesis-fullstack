@@ -1,33 +1,26 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require("../withAuth")
+
 const department = require("../controllers/department.controller.js");
 
 // Create a new Department
-router.post('/', department.create);
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, department.create);
 
 //Retrieve all Departments
-router.get('/', department.findAll);
-
-//Retrieve all Departments by Organization Id
-router.get('/organization/:id', department.findAllByOrgId);
+router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, department.findAll);
 
 //Retrieve a single Department with an id
-router.get('/:id', department.findOne);
+router.get('/:id', withAuth.verifyToken, department.findOne);
 
 // Update a Department with an id
-router.put('/:id', department.update);
+router.put('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, department.update);
 
 // Delete a Department with an id
-router.delete('/:id', department.delete);
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, department.delete);
 
 // Delete all Departments
-router.delete('/', department.deleteAll);
-
-// Delete all Departments
-router.delete('/', department.deleteAll);
-
-// Delete all Departments by Organization Id
-router.delete('/organization/:id', department.deleteAllByOrgId);
+router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, department.deleteAll);
 
 module.exports = router;

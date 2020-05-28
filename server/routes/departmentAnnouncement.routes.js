@@ -1,33 +1,26 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require('../withAuth')
+
 const departmentAnnouncement = require("../controllers/departmentAnnouncement.controller.js");
 
 // Create a new Department Announcement
-router.post('/', departmentAnnouncement.create);
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, departmentAnnouncement.create);
 
-//Retrieve all Department Announcements
-router.get('/', departmentAnnouncement.findAll);
+//Retrieve all Announcement
+router.get('/', withAuth.verifyToken, departmentAnnouncement.findAll)
 
-//Retrieve all Annoucnements of a Department with DepartmentID
-router.get('/department/:id', departmentAnnouncement.findAllByDeptId);
+//Retrieve all Announcements of a Department with DepartmentID
+router.get('/department/:id', withAuth.verifyToken, departmentAnnouncement.findAllByDeptId);
 
 //Retrieve a single Department Announcement with an id
-router.get('/:id', departmentAnnouncement.findOne);
-
-// Update a Department Announcement with an id
-router.put('/:id', departmentAnnouncement.update);
+router.get('/:id', withAuth.verifyToken, departmentAnnouncement.findOne);
 
 // Delete a Department Announcement with an id
-router.delete('/:id', departmentAnnouncement.delete);
-
-// Delete all Department Announcements
-router.delete('/', departmentAnnouncement.deleteAll);
-
-// Delete all Department Announcements
-router.delete('/', departmentAnnouncement.deleteAll);
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, departmentAnnouncement.delete);
 
 // Delete all Department Announcements by Department Id
-router.delete('/department/:id', departmentAnnouncement.deleteAllByDeptId);
+router.delete('/department/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, departmentAnnouncement.deleteAllByDeptId);
 
 module.exports = router;

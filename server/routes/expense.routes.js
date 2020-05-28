@@ -1,39 +1,32 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require("../withAuth")
+
 const expense = require("../controllers/expense.controller.js");
 
 // Create a new Expense
-router.post('/', expense.create);
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, expense.create);
 
 //Retrieve all Expenses
-router.get('/', expense.findAll);
+router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.findAll)
 
-//Retrieve all Expenses by Organization Id
-router.get('/organization/:id', expense.findAllByOrgId);
-
-//Retrieve all Expenses by User Id
-router.get('/user/:id', expense.findAllByUserId);
+//Retrieve all Expenses by Department Id
+router.get('/department/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.findAllByDeptId);
 
 //Retrieve a single Expense with an id
-router.get('/:id', expense.findOne);
+router.get('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.findOne);
 
-// Update a Expense with an id
-router.put('/:id', expense.update);
-
-// Delete a Expense with an id
-router.delete('/:id', expense.delete);
+// Update an Expense with an id
+router.put('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.update);
 
 // Delete all Expenses
-router.delete('/', expense.deleteAll);
+router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, expense.deleteAll)
 
-// Delete all Expenses
-router.delete('/', expense.deleteAll);
+// Delete an Expense with an id
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, expense.delete);
 
-// Delete all Expenses by Organization Id
-router.delete('/organization/:id', expense.deleteAllByOrgId);
-
-// Delete all Expenses by User Id
-router.delete('/user/:id', expense.deleteAllByUserId);
+// Delete all Expenses by Department Id
+router.delete('/department/:id', withAuth.verifyToken, withAuth.withRoleAdmin, expense.deleteAllByDeptId);
 
 module.exports = router;

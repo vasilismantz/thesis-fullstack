@@ -1,39 +1,32 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require("../withAuth")
+
 const job = require("../controllers/job.controller.js");
 
-// Create a new Department
-router.post('/', job.create);
+// Create a new Job
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, job.create);
 
 //Retrieve all Jobs
-router.get('/', job.findAll);
+router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, job.findAll);
 
-//Retrieve all Jobs by Organization Id
-router.get('/organization/:id', job.findAllByOrgId);
+//Retrieve all Jobs by User Id
+router.get('/user/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, job.findAllByUserId);
 
-//Retrieve all Jobs by DepartmentId Id
-router.get('/department/:id', job.findAllByDeptId);
+//Retrieve a single Job with an id
+router.get('/:id', withAuth.verifyToken, job.findOne);
 
-//Retrieve a single Department with an id
-router.get('/:id', job.findOne);
+// Update a Job with an id
+router.put('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, job.update);
 
-// Update a Department with an id
-router.put('/:id', job.update);
-
-// Delete a Department with an id
-router.delete('/:id', job.delete);
+// Delete a Job with an id
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, job.delete);
 
 // Delete all Jobs
-router.delete('/', job.deleteAll);
+router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, job.deleteAll);
 
-// Delete all Jobs
-router.delete('/', job.deleteAll);
-
-// Delete all Jobs by Organization Id
-router.delete('/organization/:id', job.deleteAllByOrgId);
-
-// Delete all Jobs by Department Id
-router.delete('/department/:id', job.deleteAllByDeptId);
+// Delete all Jobs by User Id
+router.delete('/user/:id', withAuth.verifyToken, withAuth.withRoleAdmin, job.deleteAllByUserId);
 
 module.exports = router;

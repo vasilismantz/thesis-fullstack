@@ -15,6 +15,8 @@ exports.create = (req, res) => {
   // Create a Job
   const job = {
     jobTitle: req.body.jobTitle,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
     departmentId: req.body.departmentId,
     organizationId: req.body.organizationId
   };
@@ -46,27 +48,11 @@ exports.findAll = (req, res) => {
     });
 };
 
-//Retrieve all Jobs By Organization Id
-exports.findAllByOrgId = (req, res) => {
-    const organizationId = req.params.id
+//Retrieve all Jobs By User Id
+exports.findAllByUserId = (req, res) => {
+    const userId = req.params.id
 
-    Job.findAll({where: {organizationId: organizationId}})
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving jobs."
-        });
-      });
-  };
-
-//Retrieve all Jobs By Department Id
-exports.findAllByDeptId = (req, res) => {
-    const departmentId = req.params.id
-
-    Job.findAll({where: {departmentId: departmentId}})
+    Job.findAll({where: {userId: userId}})
       .then(data => {
         res.send(data);
       })
@@ -160,31 +146,12 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-// Delete all Jobs by Organization Id.
-exports.deleteAllByOrgId = (req, res) => {
-    const organizationdId = req.params.id;
+// Delete all Jobs by User Id.
+exports.deleteAllByUserId = (req, res) => {
+    const userId = req.params.id;
 
     Job.destroy({
-      where: {organizationId: organizationdId},
-      truncate: false
-    })
-      .then(nums => {
-        res.send({ message: `${nums} Jobs were deleted successfully!` });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while removing all Jobs."
-        });
-      });
-  };
-
-// Delete all Jobs by Department Id.
-exports.deleteAllByDeptId = (req, res) => {
-    const departmentId = req.params.id;
-
-    Job.destroy({
-      where: {departmentId: departmentId},
+      where: {userId: userId},
       truncate: false
     })
       .then(nums => {

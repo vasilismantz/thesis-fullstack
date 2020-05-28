@@ -15,6 +15,8 @@ exports.create = (req, res) => {
   // Create a Working Day
   const daysWorking = {
     day: req.body.day,
+    startingHour: req.body.startingHour,
+    endingHour: req.body.endingHour,
     organizationId: req.body.organizationId
   };
 

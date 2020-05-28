@@ -4,11 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var cors = require('cors')
+
 const db = require("./models");
 require('dotenv').config()
 
 var indexRouter = require('./routes/index');
 var api = require('./routes/api');
+var login = require('./routes/login/login.routes');
 
 var app = express();
 
@@ -22,12 +25,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and re-sync db.");
-});
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions))
+
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("Drop and re-sync db.");
+// });
 
 app.use('/', indexRouter);
 app.use('/api', api);
+app.use('/login', login)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -52,7 +52,7 @@ exports.findAll = (req, res) => {
 exports.findAllByUserId = (req, res) => {
     const userId = req.params.id
 
-    PersonalEvent.findAll({where: {userId: userId}})
+    PersonalEvent.findOne({where: {userId: userId}})
       .then(data => {
         res.send(data);
       })

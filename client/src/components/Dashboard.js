@@ -43,14 +43,14 @@ export default class Dashboard extends Component {
           {/* Expense Report & Expense Report */}
           <div className="col-md-6">
             <div className="panel panel-default">
-              <div className="panel-heading with-border" style={{"background-color": "#515e73", color: "white"}}>
-                <h3 class="panel-title">Expense Report</h3>
+              <div className="panel-heading with-border" style={{"backgroundColor": "#515e73", color: "white"}}>
+                <h3 className="panel-title">Expense Report</h3>
               </div>
               <NewChartsPage />
             </div>
             <div className="panel panel-default">
             <div className="panel-heading with-border">
-                <h3 class="panel-title">Expense Report</h3>
+                <h3 className="panel-title">Expense Report</h3>
               </div>
               <NewChartsPage />
             </div>

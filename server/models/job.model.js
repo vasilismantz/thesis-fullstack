@@ -9,6 +9,14 @@ module.exports = (sequelize, Sequelize) => {
       jobTitle: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      startDate: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      endDate: {
+        type: Sequelize.DATE,
+        allowNull: false
       }
     }, {
         timestamps: false,

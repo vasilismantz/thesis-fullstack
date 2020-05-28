@@ -24,12 +24,13 @@ module.exports = (sequelize, Sequelize) => {
           notEmpty: true
         }
       },
-      firstName: {
+      fullName: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      lastName: {
-        type: Sequelize.STRING,
+      role: {
+        type: Sequelize.ENUM,
+        values: ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE'],
         allowNull: false
       },
       active: {

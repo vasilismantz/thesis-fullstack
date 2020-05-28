@@ -1,33 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require('../withAuth')
+
 const daysWorking = require("../controllers/daysWorking.controller.js");
 
-// Create a new Department
-router.post('/', daysWorking.create);
+// Create a new Working Day
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, daysWorking.create);
 
 //Retrieve all Working Days
-router.get('/', daysWorking.findAll);
+router.get('/', withAuth.verifyToken, daysWorking.findAll);
 
-//Retrieve all Working Days by Organization Id
-router.get('/organization/:id', daysWorking.findAllByOrgId);
+//Retrieve a single Working Day with an id
+router.get('/:id', withAuth.verifyToken, daysWorking.findOne);
 
-//Retrieve a single Department with an id
-router.get('/:id', daysWorking.findOne);
-
-// Update a Department with an id
-router.put('/:id', daysWorking.update);
-
-// Delete a Department with an id
-router.delete('/:id', daysWorking.delete);
+// Delete a Working Day with an id
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, daysWorking.delete);
 
 // Delete all Working Days
-router.delete('/', daysWorking.deleteAll);
-
-// Delete all Working Days
-router.delete('/', daysWorking.deleteAll);
-
-// Delete all Working Days by Organization Id
-router.delete('/organization/:id', daysWorking.deleteAllByOrgId);
+router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, daysWorking.deleteAll);
 
 module.exports = router;

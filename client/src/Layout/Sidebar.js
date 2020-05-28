@@ -1,18 +1,25 @@
 import React, { Component } from "react";
 
 export default class Sidebar extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user: {}
+    }
+  }
+  componentDidMount() {
+    let userData = JSON.parse(localStorage.getItem('user'))
+    this.setState({user: userData})
+  }
+
   render() {
     return (
       <aside className="main-sidebar sidebar-dark-primary elevation-4" >
         {/* Brand Logo */}
-        <a href="index3.html" className="brand-link">
-          <img
-            src={process.env.PUBLIC_URL + '/dist/img/AdminLTELogo.png'}
-            alt="AdminLTE Logo"
-            className="brand-image img-circle elevation-3"
-            style={{ opacity: ".8" }}
-          />
-          <span className="brand-text font-weight-light ml-1">Admin Panel</span>
+        <a href="/" className="brand-link">
+          <span className="brand-text font-weight-light ml-1">HRMS</span>
         </a>
         {/* Sidebar */}
         <div className="sidebar">
@@ -27,7 +34,7 @@ export default class Sidebar extends Component {
             </div>
             <div className="info">
               <a href="#" className="d-block">
-                Alexander Pierce
+                {this.state.user.fullname}
               </a>
             </div>
           </div>

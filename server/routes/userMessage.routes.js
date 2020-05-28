@@ -1,33 +1,26 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require("../withAuth")
+
 const message = require("../controllers/userMessage.controller.js");
 
 // Create a new Message
-router.post('/', message.create);
-
-//Retrieve all Messages
-router.get('/', message.findAll);
+router.post('/', withAuth.verifyToken, message.create);
 
 //Retrieve all Messages by User Id
-router.get('/organization/:id', message.findAllByUserId);
+router.get('/user/:id', withAuth.verifyToken, message.findAllByUserId);
 
 //Retrieve a single Message with an id
-router.get('/:id', message.findOne);
+router.get('/:id', withAuth.verifyToken, message.findOne);
 
-// Update a Message with an id
-router.put('/:id', message.update);
+// Delete all Messages
+router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, message.deleteAll);
 
 // Delete a Message with an id
-router.delete('/:id', message.delete);
-
-// Delete all Messages
-router.delete('/', message.deleteAll);
-
-// Delete all Messages
-router.delete('/', message.deleteAll);
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, message.delete);
 
 // Delete all Messages by User Id
-router.delete('/organization/:id', message.deleteAllByUserId);
+router.delete('/user/:id', withAuth.verifyToken, withAuth.withRoleAdmin, message.deleteAllByUserId);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const db = require("../models");
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Tutorial
+// Create and Save a new User
 exports.create = (req, res) => {
     // Validate request
     if (!req.body) {
@@ -16,23 +16,31 @@ exports.create = (req, res) => {
     const user = {
         username: req.body.username,
         password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        organizationId: req.body.organizationId,
+        fullName: req.body.fullname,
+        role: "ROLE_ADMIN",
         active: true
     };
 
     // Save User in the database
-    User.create(user)
-        .then(data => {
-            res.send(data);
+    User.findOne({ where: { username: user.username } })
+        .then(userExists => {
+            if (!userExists) {
+                User.create(user)
+                    .then(data => {
+                        res.send(data);
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message:
+                                err.message || "Some error occurred while creating the User."
+                        });
+                    });
+            } else {
+                res.status(403).send({
+                    message: "Username already exists"
+                })
+            }
         })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the User."
-            });
-        });
 };
 
 // Retrieve all Users from the database.
@@ -49,11 +57,11 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Retrieve all Users from a single Organization from the database.
-exports.findAllByOrganization = (req, res) => {
-    const organizationId = req.params.id;
+// Retrieve all Users by Department Id
+exports.findAllByDeptId = (req, res) => {
+    const departmentId = req.params.id;
 
-    User.findAll({ where: { organizationId: organizationId } })
+    User.findAll({ where: { departmentId: departmentId } })
         .then(data => {
             res.send(data);
         })
@@ -147,11 +155,11 @@ exports.deleteAll = (req, res) => {
         });
 };
 
-exports.deleteAllByOrganization = (req, res) => {
-    const organizationId = req.params.id
+exports.deleteAllByDeptId = (req, res) => {
+    const departmentId = req.params.id
 
     User.destroy({
-        where: { organizationId: organizationId },
+        where: { departmentId: departmentId },
         truncate: false
     })
         .then(nums => {

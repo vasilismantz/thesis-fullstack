@@ -1,33 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require("../withAuth")
+
 const daysHoliday = require("../controllers/daysHoliday.controller.js");
 
-// Create a new Department
-router.post('/', daysHoliday.create);
+// Create a new Holiday Date
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, daysHoliday.create);
 
 //Retrieve all Holiday Dates
-router.get('/', daysHoliday.findAll);
+router.get('/', withAuth.verifyToken, withAuth.withRoleAdmin, daysHoliday.findAll);
 
-//Retrieve all Holiday Dates by Organization Id
-router.get('/organization/:id', daysHoliday.findAllByOrgId);
+//Retrieve a single Holiday Date with an id
+router.get('/:id', withAuth.verifyToken, daysHoliday.findOne);
 
-//Retrieve a single Department with an id
-router.get('/:id', daysHoliday.findOne);
-
-// Update a Department with an id
-router.put('/:id', daysHoliday.update);
-
-// Delete a Department with an id
-router.delete('/:id', daysHoliday.delete);
+// Delete a Holiday Date with an id
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, daysHoliday.delete);
 
 // Delete all Holiday Dates
-router.delete('/', daysHoliday.deleteAll);
-
-// Delete all Holiday Dates
-router.delete('/', daysHoliday.deleteAll);
-
-// Delete all Holiday Dates by Organization Id
-router.delete('/organization/:id', daysHoliday.deleteAllByOrgId);
+router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, daysHoliday.deleteAll);
 
 module.exports = router;

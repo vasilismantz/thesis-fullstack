@@ -1,39 +1,32 @@
 var express = require('express');
 var router = express.Router();
 
+const withAuth = require("../withAuth")
+
 const payment = require("../controllers/payment.controller.js");
 
 // Create a new Payment
-router.post('/', payment.create);
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, payment.create);
 
-//Retrieve all Payments 
-router.get('/', payment.findAll);
+// Retrieve all Payments
+router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, payment.findAll)
 
-//Retrieve all Payments  by Organization Id
-router.get('/organization/:id', payment.findAllByOrgId);
-
-//Retrieve all Payments  by User Id
-router.get('/user/:id', payment.findAllByUserId);
+//Retrieve all Payments by Job Id
+router.get('/job/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, payment.findAllByJobId);
 
 //Retrieve a single Payment with an id
-router.get('/:id', payment.findOne);
+router.get('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, payment.findOne);
 
 // Update a Payment with an id
-router.put('/:id', payment.update);
+router.put('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, payment.update);
 
 // Delete a Payment with an id
-router.delete('/:id', payment.delete);
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, payment.delete);
 
 // Delete all Payments
-router.delete('/', payment.deleteAll);
+router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, payment.deleteAll);
 
-// Delete all Payments
-router.delete('/', payment.deleteAll);
-
-// Delete all Payments by Organization Id
-router.delete('/organization/:id', payment.deleteAllByOrgId);
-
-// Delete all Payments by User Id
-router.delete('/user/:id', payment.deleteAllByUserId);
+// Delete all Payments by Job Id
+router.delete('/job/:id', withAuth.verifyToken, withAuth.withRoleAdmin, payment.deleteAllByOrgId);
 
 module.exports = router;

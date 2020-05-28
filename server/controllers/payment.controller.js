@@ -19,8 +19,7 @@ exports.create = (req, res) => {
     paymentFine: req.body.PaymentFine,
     paymentAmount: req.body.paymentAmount,
     comments: req.body.comments,
-    organizationId: req.body.organizationId,
-    userId: req.body.userId
+    jobId: req.body.jobId
   };
 
   // Save Payment in the database
@@ -51,26 +50,10 @@ exports.findAll = (req, res) => {
 };
 
 //Retrieve all Payments By Organization Id
-exports.findAllByOrgId = (req, res) => {
+exports.findAllByJobId = (req, res) => {
     const organizationId = req.params.id
 
     Payment.findAll({where: {organizationId: organizationId}})
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving departments."
-        });
-      });
-  };
-
-//Retrieve all Payments By User Id
-exports.findAllByUserId = (req, res) => {
-    const userId = req.params.id
-
-    Payment.findAll({where: {userId: userId}})
       .then(data => {
         res.send(data);
       })
@@ -164,31 +147,12 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-// Delete all Payments by Organization Id.
+// Delete all Payments by Job Id.
 exports.deleteAllByOrgId = (req, res) => {
-    const organizationdId = req.params.id;
+    const jobId = req.params.id;
 
     Payment.destroy({
-      where: {organizationId: organizationdId},
-      truncate: false
-    })
-      .then(nums => {
-        res.send({ message: `${nums} Payments were deleted successfully!` });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while removing all Payments."
-        });
-      });
-  };
-
-// Delete all Payments by User Id.
-exports.deleteAllByUserId = (req, res) => {
-    const userId = req.params.id;
-
-    Payment.destroy({
-      where: {userId: userId},
+      where: {jobId: jobId},
       truncate: false
     })
       .then(nums => {

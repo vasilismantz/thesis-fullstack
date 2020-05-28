@@ -48,9 +48,9 @@ exports.findAll = (req, res) => {
 
 //Retrieve all Messages By User Id
 exports.findAllByUserId = (req, res) => {
-    const organizationId = req.params.id
+    const userId = req.params.id
 
-    Message.findAll({where: {organizationId: organizationId}})
+    Message.findAll({where: {senderId: userId}})
       .then(data => {
         res.send(data);
       })

@@ -47,7 +47,7 @@ exports.findAll = (req, res) => {
     });
 };
 
-//Retrieve all Departments By Organization Id
+//Retrieve all Departments By Department Id
 exports.findAllByDeptId = (req, res) => {
     const departmentId = req.params.id
 
