@@ -19,7 +19,7 @@ export default class App extends Component {
             <Switch>
               <Route exact path="/login" component={LoginContainer} />
               <Route exact path="/register" component={RegisterContainer} />
-              <Route path="/" component={DefaultContainer} />
+              <Route path="/" component={withAuth(DefaultContainer)} />
             </Switch>
         </Router>
       </>

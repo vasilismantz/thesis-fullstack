@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "../App.css";
 import Infobox from "./infobox";
 import Calendar from "./Calendar";
-import NewChartsPage from "./ChartsPage";
+import ChartsPage from "./ChartsPage";
 
 export default class Dashboard extends Component {
   render() {
@@ -43,16 +43,16 @@ export default class Dashboard extends Component {
           {/* Expense Report & Expense Report */}
           <div className="col-md-6">
             <div className="panel panel-default">
-              <div className="panel-heading with-border" style={{"backgroundColor": "#515e73", color: "white"}}>
+              <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
                 <h3 className="panel-title">Expense Report</h3>
               </div>
-              <NewChartsPage />
+              <ChartsPage />
             </div>
             <div className="panel panel-default">
-            <div className="panel-heading with-border">
+              <div className="panel-heading with-border">
                 <h3 className="panel-title">Expense Report</h3>
               </div>
-              <NewChartsPage />
+              <ChartsPage />
             </div>
           </div>
         </div>

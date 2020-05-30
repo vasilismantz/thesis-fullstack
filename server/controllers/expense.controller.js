@@ -1,6 +1,7 @@
 const db = require("../models");
 const Expense = db.expense;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize
 
 // Create and Save a new Expense
 exports.create = (req, res) => {
@@ -47,6 +48,30 @@ exports.findAll = (req, res) => {
       });
     });
 };
+
+exports.findAllByYear = (req, res) => {
+  const year = req.params.id;
+  Expense.findAll({
+    where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), year),
+    attributes: [
+      [sequelize.fn('monthname', sequelize.col('date')), 'month'], 
+      [sequelize.fn('sum', sequelize.col('amount')), 'expenses']
+    ],
+    group: [sequelize.fn('month', sequelize.col('date')), 'month']
+
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving departments."
+      });
+    });
+};
+
+
 
 //Retrieve all Expenses By Department Id
 exports.findAllByDeptId = (req, res) => {
