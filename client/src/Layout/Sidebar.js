@@ -9,6 +9,7 @@ export default class Sidebar extends Component {
       user: {}
     }
   }
+
   componentDidMount() {
     let userData = JSON.parse(localStorage.getItem('user'))
     this.setState({user: userData})
