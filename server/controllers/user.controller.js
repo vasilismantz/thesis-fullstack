@@ -57,6 +57,20 @@ exports.findAll = (req, res) => {
         });
 };
 
+// Retrieve all Users from the database.
+exports.findTotal = (req, res) => {
+    User.count()
+        .then(data => {
+            res.send(data.toString());
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving the Users."
+            });
+        });
+};
+
 // Retrieve all Users by Department Id
 exports.findAllByDeptId = (req, res) => {
     const departmentId = req.params.id;
