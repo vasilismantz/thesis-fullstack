@@ -11,6 +11,9 @@ router.post('/', user.create);
 // Retrieve all Users
 router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, user.findAll);
 
+//Retreive user count
+router.get('/total', withAuth.verifyToken, withAuth.withRoleAdminOrManager, user.findTotal);
+
 //Retrieve all Users by Department Id
 router.get('/department/:id', withAuth.verifyToken, user.findAllByDeptId);
 
