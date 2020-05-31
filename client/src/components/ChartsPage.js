@@ -12,6 +12,8 @@ export default class NewChartsPage extends React.Component {
       expenseYear: 2020
     };
 
+    this.onChange = this.onChange.bind(this)
+
   }
 
   componentDidMount() {
@@ -53,12 +55,18 @@ export default class NewChartsPage extends React.Component {
     return array
   }
 
+  onChange = (event) => {
+    this.setState({expenseYear: event.target.value}, () => {
+      this.fetchData()
+    })
+  }
+
   render() {
     return (
       <div className="card">
         <div className="mt-1" style={{ textAlign: "center" }}>
           <span className="ml-4">Select Year: </span>
-          <select>
+          <select onChange={this.onChange} value={this.state.expenseYear}>
             <option value="2020">2020</option>
             <option value="2019">2019</option>
             <option value="2018">2018</option>
@@ -70,6 +78,7 @@ export default class NewChartsPage extends React.Component {
             data={this.state.chartData}
             height={300}
             options={{ maintainAspectRatio: false }}
+            redraw
           />
         </div>
       </div>
