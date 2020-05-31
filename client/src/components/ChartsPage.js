@@ -23,14 +23,13 @@ export default class NewChartsPage extends React.Component {
   fetchData = () => {
     axios({
       method: 'get',
-      url: 'api/expense/year/' + this.state.expenseYear,
+      url: 'api/expenses/year/' + this.state.expenseYear,
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
       .then(res => {
         let data = this.transformData(res.data)
         let array = this.makeArrayStructure(data);
         this.setState({ chartData: array })
-        console.log(array)
       })
       .catch(err => {
         console.log('err', err)
