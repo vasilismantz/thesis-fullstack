@@ -85,7 +85,7 @@ exports.withRoleAdminOrManager = (req, res, next) => {
     })
     .then(user => {
         if(user) {
-            if(user.role === "ROLE_EMPLOYEE" || user.role === "ROLE_MANAGER") {
+            if(user.role === "ROLE_ADMIN" || user.role === "ROLE_MANAGER") {
                 req.authData = authData;
                 next()
             } else {
