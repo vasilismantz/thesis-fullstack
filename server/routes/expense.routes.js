@@ -11,6 +11,7 @@ router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, expense.create);
 //Retrieve all Expenses
 router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.findAll)
 
+// Retrieve Expenses By Year
 router.get('/year/:id', withAuth.verifyToken, expense.findAllByYear)
 
 //Retrieve all Expenses by Department Id
