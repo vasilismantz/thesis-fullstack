@@ -4,9 +4,41 @@ import "../App.css";
 import Infobox from "./infobox";
 import Calendar from "./Calendar";
 import ChartsPage from "./ChartsPage";
-
+import axios from 'axios'
 export default class Dashboard extends Component {
-  render() {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      totalEmployees: '',
+      totalExpenses: '',
+    }
+  }
+
+  componentDidMount() {
+    axios({
+      method: 'get',
+      url: '/api/users/total',
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+    })
+    .then(res => {
+      console.log('res',res)
+      this.setState({totalEmployees: parseInt(res.data)})
+    })
+    .catch(err => console.log(err))
+
+    axios({
+      method: 'get',
+      url: '/api/expenses/year/2020',
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+    })
+    .then(res => {
+      let array = res.data
+      let sum = array.reduce((a, b) => ({expenses: parseInt(a.expenses) + parseInt(b.expenses)}))
+      this.setState({totalExpenses: sum.expenses})
+    })
+  }
+  render() {    
     return (
       <div>
         {/* First Row with small info-boxes */}
@@ -15,7 +47,7 @@ export default class Dashboard extends Component {
           <div className="col-md-4 col-sm-6 col-xs-12">
             <Infobox
               title="Total Employees"
-              description=""
+              description={this.state.totalEmployees}
               color="bg-success"
               icon="fa fa-users"
             />
@@ -24,7 +56,7 @@ export default class Dashboard extends Component {
           <div className="col-md-4 col-sm-6 col-xs-12">
             <Infobox
               title="Total Expenses"
-              description=""
+              description={this.state.totalExpenses + "€"}
               color="bg-danger"
               icon="fa fa-shopping-cart"
             />
