@@ -7,6 +7,7 @@ import axios from "axios";
 import AddEventPopup from "./AddEventPopup";
 import moment from "moment";
 import ReactToolTip from "react-tooltip";
+import ShowEventPopup from './ShowEventPopup'
 
 export default class Calendar extends Component {
   constructor(props) {
@@ -15,8 +16,12 @@ export default class Calendar extends Component {
     this.state = {
       user: {},
       events: [],
+      showAddModel: false,
       showModel: false,
+      selectedEvent: {}
     };
+
+    this.handleEventClick = this.handleEventClick.bind(this)
   }
 
   componentDidMount() {
@@ -34,7 +39,8 @@ export default class Calendar extends Component {
           start: x.eventStartDate,
           end: x.eventEndDate,
           id: x.id,
-          color: '#007bff'
+          color: '#007bff',
+          textColor: 'white'
 
         }));
 
@@ -52,19 +58,28 @@ export default class Calendar extends Component {
     });
   }
 
+  handleEventClick(info) {
+    console.log(info)
+    this.setState({
+      selectedEvent: {
+        id: info.event.id,
+        title: info.event.title,
+        description: info.event.extendedProps.description,
+        start: info.event.start,
+        end: info.event.end
+      },
+      showModel: true
+    })
+  }
+
   handleEventPositioned(info) {
     info.el.setAttribute("title", info.event.extendedProps.description ? info.event.extendedProps.description : 'No description');
     ReactToolTip.rebuild();
   }
 
-  removeEvent = (event) => {
-    var newEvents = [...this.state.events]; // make a separate copy of the array
-    newEvents.splice(event, 1);
-    this.setState({ events: newEvents });
-  };
-
   render() {
-    let closeModel = () => this.setState({ showModel: false });
+    let closeAddModel = () => this.setState({ showAddModel: false });
+    let closeShowModel = () => this.setState({showModel: false})
 
     return (
       <>
@@ -72,14 +87,14 @@ export default class Calendar extends Component {
           defaultView="dayGridMonth"
           plugins={[dayGridPlugin, interactionPlugin]}
           eventClick={this.handleEventClick}
-          dateClick={() => this.setState({ showModel: true })}
+          dateClick={() => this.setState({ showAddModel: true })}
           events={this.state.events}
           eventPositioned={this.handleEventPositioned}
           customButtons={{
             button: {
               text: "Add Event",
               click: () => {
-                this.setState({showModel: true})
+                this.setState({showAddModel: true})
               },
             },
           }}
@@ -89,7 +104,10 @@ export default class Calendar extends Component {
             right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
           }}
         />
-        <AddEventPopup show={this.state.showModel} onHide={closeModel} />
+        <AddEventPopup show={this.state.showAddModel} onHide={closeAddModel} />
+        {this.state.showModel ? (
+          <ShowEventPopup show={true} onHide={closeShowModel} data={this.state.selectedEvent}/>
+        ) : (<></>)}
       </>
     );
   }
