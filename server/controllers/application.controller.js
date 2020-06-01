@@ -1,7 +1,8 @@
 const db = require("../models");
-const Application = db.Application;
-const User = db.User;
+const Application = db.application;
+const User = db.user;
 const Op = db.Sequelize.Op;
+const moment = require('moment')
 
 // Create and Save a new Application
 exports.create = (req, res) => {
@@ -44,6 +45,30 @@ exports.findAll = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Applications.",
+      });
+    });
+};
+
+// Retrieve all Applications from the database.
+exports.findAllRecent = (req, res) => {
+  Application.findAll({
+    where: {
+      endDate: {
+        [Op.gte]: moment().subtract(14, 'days').toDate()
+      }
+    },
+    include: [{
+      model: User
+    }]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(err)
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving Applications.",
