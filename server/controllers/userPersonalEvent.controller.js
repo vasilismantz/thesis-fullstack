@@ -1,5 +1,5 @@
 const db = require("../models");
-const PersonalEvent = db.personalEvent;
+const PersonalEvent = db.userPersonalEvent;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new PersonalEvent
@@ -52,7 +52,7 @@ exports.findAll = (req, res) => {
 exports.findAllByUserId = (req, res) => {
     const userId = req.params.id
 
-    PersonalEvent.findOne({where: {userId: userId}})
+    PersonalEvent.findAll({where: {userId: userId}})
       .then(data => {
         res.send(data);
       })
