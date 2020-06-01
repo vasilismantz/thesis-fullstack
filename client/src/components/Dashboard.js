@@ -4,7 +4,9 @@ import "../App.css";
 import Infobox from "./infobox";
 import Calendar from "./Calendar";
 import ChartsPage from "./ChartsPage";
+import RecentApplciations from "./RecentApplications"
 import axios from 'axios'
+
 export default class Dashboard extends Component {
   constructor(props) {
     super(props)
@@ -12,21 +14,25 @@ export default class Dashboard extends Component {
     this.state = {
       totalEmployees: '',
       totalExpenses: '',
+      recentApplications: []
     }
   }
 
+
+
   componentDidMount() {
+    // Fetch Employees Total 
     axios({
       method: 'get',
       url: '/api/users/total',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
     })
     .then(res => {
-      console.log('res',res)
       this.setState({totalEmployees: parseInt(res.data)})
     })
     .catch(err => console.log(err))
 
+    //Fetch Expenses Total
     axios({
       method: 'get',
       url: '/api/expenses/year/2020',
@@ -72,7 +78,7 @@ export default class Dashboard extends Component {
           <div className="col-sm-6">
             <Calendar />
           </div>
-          {/* Expense Report & Expense Report */}
+          {/* Expense Report & Recent Applications */}
           <div className="col-md-6">
             <div className="panel panel-default">
               <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
@@ -81,10 +87,10 @@ export default class Dashboard extends Component {
               <ChartsPage />
             </div>
             <div className="panel panel-default">
-              <div className="panel-heading with-border">
-                <h3 className="panel-title">Expense Report</h3>
+              <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
+                <h3 className="panel-title">Recent Applications</h3>
               </div>
-              <ChartsPage />
+              <RecentApplciations />
             </div>
           </div>
         </div>
