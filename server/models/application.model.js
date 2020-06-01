@@ -20,7 +20,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         status: {
             type: Sequelize.ENUM,
-            values: ['approved', 'rejected', 'pending'],
+            values: ['Approved', 'Rejected', 'Pending'],
             allowNull: false
         },
         type: {
