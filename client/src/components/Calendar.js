@@ -41,7 +41,6 @@ export default class Calendar extends Component {
           id: x.id,
           color: '#007bff',
           textColor: 'white'
-
         }));
 
         for (var i in newEvents) {
@@ -90,6 +89,12 @@ export default class Calendar extends Component {
           dateClick={() => this.setState({ showAddModel: true })}
           events={this.state.events}
           eventPositioned={this.handleEventPositioned}
+          eventTimeFormat= {{
+            hour: '2-digit',
+            minute: '2-digit',
+            meridiem: false,
+            hour12: false
+          }}
           customButtons={{
             button: {
               text: "Add Event",
