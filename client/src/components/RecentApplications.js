@@ -29,8 +29,7 @@ export default class RecentApplications extends React.Component {
         <div>
           <ul>
             {this.state.recentApplications.map((app) => (
-              <>
-                <li style={{ listStyle: "none", height: '50px'}} key={app.id}>
+                <li style={{ listStyle: "none", height: '50px'}} key={app.id} className="mt-1 mb-2">
                   <h5>
                     <div className="float-left mr-1">
                       <img src={process.env.PUBLIC_URL + '/user-40.png'}></img>
@@ -47,9 +46,8 @@ export default class RecentApplications extends React.Component {
                     </div>
                     <p></p>
                   </h5>
+                <hr className="mt-2 mb-2"/>
                 </li>
-                <hr style={{marginTop: '1px'}}/>
-               </>
             ))}
           </ul>
         </div>
