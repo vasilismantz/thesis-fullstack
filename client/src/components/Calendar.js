@@ -10,6 +10,9 @@ import ReactToolTip from "react-tooltip";
 import ShowEventPopup from './ShowEventPopup'
 
 export default class Calendar extends Component {
+  
+  _isMounted=false;
+
   constructor(props) {
     super(props);
 
@@ -25,40 +28,47 @@ export default class Calendar extends Component {
   }
 
   componentDidMount() {
-    this.setState({ user: JSON.parse(localStorage.getItem("user")) }, () => {
-      axios({
-        method: "get",
-        url: `api/personalEvents/user/${this.state.user.id}`,
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      })
-      .then((res) => {
+    this._isMounted = true;
 
-        let newEvents = res.data.map((x) => ({
-        title: x.eventTitle,
-          description: x.eventDescription,
-          start: x.eventStartDate,
-          end: x.eventEndDate,
-          id: x.id,
-          color: '#007bff',
-          textColor: 'white'
-        }));
+    if(this._isMounted) {
+      this.setState({ user: JSON.parse(localStorage.getItem("user")) }, () => {
+        axios({
+          method: "get",
+          url: `api/personalEvents/user/${this.state.user.id}`,
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        })
+        .then((res) => {
 
-        for (var i in newEvents) {
-          newEvents[i].start = moment
-            (newEvents[i].start)
-            .format("YYYY-MM-DD HH:mm:ss");
-          newEvents[i].end = moment
-            (newEvents[i].end)
-            .format("YYYY-MM-DD HH:mm:ss");
-        }
+          let newEvents = res.data.map((x) => ({
+          title: x.eventTitle,
+            description: x.eventDescription,
+            start: x.eventStartDate,
+            end: x.eventEndDate,
+            id: x.id,
+            color: '#007bff',
+            textColor: 'white'
+          }));
 
-        this.setState({ events: [...newEvents] });
+          for (var i in newEvents) {
+            newEvents[i].start = moment
+              (newEvents[i].start)
+              .format("YYYY-MM-DD HH:mm:ss");
+            newEvents[i].end = moment
+              (newEvents[i].end)
+              .format("YYYY-MM-DD HH:mm:ss");
+          }
+
+          this.setState({ events: [...newEvents] });
+        });
       });
-    });
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleEventClick(info) {
-    console.log(info)
     this.setState({
       selectedEvent: {
         id: info.event.id,
