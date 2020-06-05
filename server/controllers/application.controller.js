@@ -40,7 +40,9 @@ exports.create = (req, res) => {
 
 // Retrieve all Applications from the database.
 exports.findAll = (req, res) => {
-  Application.findAll()
+  Application.findAll({
+    include: User
+  })
     .then((data) => {
       res.send(data);
     })
