@@ -1,6 +1,7 @@
 const db = require("../models");
-const UserPersonalInformation = db.userPersonalInformation;
+const UserPersonalInformation = db.userPersonalInfo;
 const Op = db.Sequelize.Op;
+const moment = require('moment')
 
 // Create and Save a new User
 exports.create = (req, res) => {
@@ -14,13 +15,11 @@ exports.create = (req, res) => {
 
   // Create an UserPersonalInformation
   const userPersonalInformation = {
-    dateOfBirth: req.body.dateOfBirth,
+    dateOfBirth: moment(req.body.dateOfBirth).format('YYYY-MM-DD'),
     gender: req.body.gender,
     maritalStatus: req.body.maritalStatus,
     fatherName: req.body.fatherName,
-    nationality: req.body.nationality,
     idNumber: req.body.idNumber,
-    photo: req.body.photo,
     address: req.body.address,
     city: req.body.city,
     country: req.body.country,
@@ -31,16 +30,25 @@ exports.create = (req, res) => {
   };
 
   // Save UserPersonalInformation in the database
-  UserPersonalInformation.create(userPersonalInformation)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the UserPersonalInformation."
-      });
-    });
+  UserPersonalInformation.findOne({
+    where: {userId: userPersonalInformation.userId}
+  })
+  .then(user => {
+    if(!user){
+      UserPersonalInformation.create(userPersonalInformation)
+        .then(data => {
+          res.send(data);
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the UserPersonalInformation."
+          });
+        });
+    } else {
+      res.status(403).send({message: "Personal Information already exists for this User"})
+    }
+  })
 };
 
 // Retrieve all User Personal Informations from the database.
