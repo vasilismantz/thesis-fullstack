@@ -1,5 +1,9 @@
 const db = require("../models");
 const User = db.user;
+const UserPersonalInfo = db.userPersonalInfo;
+const UserFinancialInfo = db.userFinancialInfo;
+const Department = db.department;
+const Job = db.job
 const Op = db.Sequelize.Op;
 
 // Create and Save a new User
@@ -18,7 +22,8 @@ exports.create = (req, res) => {
         password: req.body.password,
         fullName: req.body.fullname,
         role: "ROLE_ADMIN",
-        active: true
+        active: true,
+        departmentId: req.body.departmentId
     };
 
     // Save User in the database
@@ -45,7 +50,17 @@ exports.create = (req, res) => {
 
 // Retrieve all Users from the database.
 exports.findAll = (req, res) => {
-    User.findAll()
+    User.findAll({
+        include: [{
+            model: UserPersonalInfo
+        }, {
+            model: UserFinancialInfo
+        }, {
+            model: Department
+        }, {
+            model: Job
+        }]
+    })
         .then(data => {
             res.send(data);
         })
@@ -91,7 +106,20 @@ exports.findAllByDeptId = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    User.findByPk(id)
+    User.findOne({
+        include: [{
+            model: UserPersonalInfo
+        }, {
+            model: UserFinancialInfo
+        }, {
+            model: Department
+        }, {
+            model: Job
+        }],
+        where: {
+            id: id
+        }
+    })
         .then(data => {
             res.send(data);
         })
