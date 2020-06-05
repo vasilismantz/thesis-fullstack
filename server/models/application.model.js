@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         type: {
             type: Sequelize.ENUM,
-            values: ['normal', 'student', 'illness', 'marriage'],
+            values: ['Normal', 'Student', 'Illness', 'Marriage'],
             allowNull: false
         }
     }, {
