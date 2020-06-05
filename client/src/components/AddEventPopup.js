@@ -78,7 +78,7 @@ export default class AddEventModel extends Component {
     return (
       <Modal
         {...this.props}
-        size="lg"
+        size="md"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -97,7 +97,7 @@ export default class AddEventModel extends Component {
             }
             <Form onSubmit={this.onSubmit}>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Title <span style={{ color: "red" }}>*</span></Form.Label>
+                    <Form.Label className="required">Title</Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Enter a Title"
@@ -122,7 +122,7 @@ export default class AddEventModel extends Component {
                 </Form.Group>
 
                 <Form.Group controlId="formStartDate">
-                    <Form.Label>Start Date <span style={{ color: "red" }}>*</span></Form.Label>
+                    <Form.Label className="required">Start Date</Form.Label>
                     <DatePicker
                         selected={this.state.startDate}
                         onChange={newStartDate => this.setState({ startDate: newStartDate })}
@@ -157,7 +157,7 @@ export default class AddEventModel extends Component {
                     />
                 </Form.Group>
 
-                <Form.Text className="mb-3"><span style={{ color: "red" }}>*</span> Required Fields</Form.Text>
+                <Form.Text className="mb-3 required"> Required Fields</Form.Text>
                 <Button variant="success" type="submit">
                     Submit
             </Button>
