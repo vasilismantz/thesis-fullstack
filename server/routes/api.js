@@ -14,6 +14,7 @@ var applicationRouter = require('./application.routes')
 var userMessageRouter = require('./userMessage.routes')
 var userPersonalEventRouter = require('./userPersonalEvent.routes')
 var userPersonalInformationRouter = require('./userPersonalInformation.routes')
+var userFinancialInformationRouter = require('./userFinacnialInformation.routes')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -33,5 +34,6 @@ router.use('/applications', applicationRouter)
 router.use('/messages', userMessageRouter)
 router.use('/personalEvents', userPersonalEventRouter)
 router.use('/personalInformations', userPersonalInformationRouter)
+router.use('/financialInformations', userFinancialInformationRouter)
 
 module.exports = router;
