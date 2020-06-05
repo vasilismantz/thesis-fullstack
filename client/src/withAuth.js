@@ -27,7 +27,10 @@ export default function withAuth(ComponentToProtect) {
           this.setState({ loading: false });
         })
         .catch((err) => {
+          console.log(err)
           console.log(`Access: ${this.state.isAuthenticated}`);
+          // localStorage.removeItem('user')
+          // localStorage.removeItem('token')
           this.setState({ loading: false, redirect: true });
         });
     }
