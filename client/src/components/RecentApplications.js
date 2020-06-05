@@ -3,6 +3,8 @@ import axios from "axios";
 
 export default class RecentApplications extends React.Component {
   
+  _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -12,14 +14,21 @@ export default class RecentApplications extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true
     //Fetch Applications Recent
     axios({
       method: "get",
       url: "/api/applications/recent",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     }).then((res) => {
-      this.setState({ recentApplications: res.data });
+      if(this._isMounted) {
+        this.setState({ recentApplications: res.data });
+      }
     });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
