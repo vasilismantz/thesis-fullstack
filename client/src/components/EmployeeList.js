@@ -1,70 +1,150 @@
 import React, { Component } from "react";
-import {Button, Card} from 'react-bootstrap'
+import { Card, Badge, Button, Form } from "react-bootstrap";
+import {Redirect} from 'react-router-dom'
+import MaterialTable from 'material-table'
+import axios from 'axios'
+import { ThemeProvider } from '@material-ui/core'
+import { createMuiTheme } from '@material-ui/core/styles'
 
 export default class EmployeeList extends Component {
+  
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      users: [],
+      selectedUser: null,
+      viewRedirect: false,
+      editRedirect: false
+    }
+  }
+
+  componentDidMount() {
+    axios({
+      method: 'get',
+      url: '/api/users',
+      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+    })
+    .then(res => {
+      this.setState({users: res.data}, () => {
+        console.log(this.state.users)
+      })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  onView = (user) => {
+    return (event) => {
+      event.preventDefault()
+
+      this.setState({selectedUser: user, viewRedirect: true})
+    } 
+  }
+
+  onEdit = (user) => {
+    return (event) => {
+      event.preventDefault()
+
+      this.setState({selectedUser: user, editRedirect: true})
+    }
+  }
 
   render() {
+
+    const theme = createMuiTheme({
+        overrides: {
+            MuiTableCell: {
+                root: {
+                    padding: '6px 6px 6px 6px'
+                }
+            }
+        }
+    })
+
     return (
-      <div className="container-fluid pt-5">
-        <h4><a className="fa fa-plus mb-2 ml-2" href="#">Add Employee</a></h4>
+      <div className="container-fluid pt-4">
+        {this.state.viewRedirect ? (<Redirect to={{pathname: '/employee-view', state: {selectedUser: this.state.selectedUser}}}></Redirect>) : (<></>)}
+        {this.state.editRedirect ? (<Redirect to={{pathname: '/employee-edit', state: {selectedUser: this.state.selectedUser}}}></Redirect>) : (<></>)}
+        <h4>
+          <a className="fa fa-plus mb-2 ml-2" href="/employee-add">
+            Add Employee
+          </a>
+        </h4>
         <div className="col-sm-12">
-            <Card>
-                <Card.Header style={{backgroundColor: "#515e73", color: "white"}}>
-                    <div className="panel-title"><strong>Employee List</strong></div>
-                </Card.Header>
-                <Card.Body>
-                    <div className="row mt-3 mb-2">
-                        <div className="col-sm-6">
-                            <select>
-                                <option value="10" selected>10</option>
-                                <option value="20">20</option>
-                                <option value="30">30</option>
-                            </select>
-                            <span> Records Per Page</span>
-                        </div>
-                        <div className="col-sm-6">
-                            <div className="myDiv">
-                                <span>Search:</span>
-                                <input type="search" className="form-control input-sm" id="search"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <table className="table table-bordered" id="employee-list-table">
-                        <thead className="thead">
-                            <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
-                            <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td><Button>Test</Button></td>
-                            </tr>
-                            <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td><Button>Test</Button></td>
-                            </tr>
-                            <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td><Button>Test</Button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </Card.Body>
-            </Card>
+          <Card>
+            <Card.Header style={{ backgroundColor: "#515e73", color: "white" }}>
+              <div className="panel-title">
+                <strong>Employee List</strong>
+              </div>
+            </Card.Header>
+            <Card.Body>
+              <ThemeProvider theme={theme}>
+                <MaterialTable 
+                  columns={[
+                    {title: 'EMP ID', field: 'id'},
+                    {title: 'Full Name', field: 'fullName'},
+                    {title: 'Dept. > Job', field: 'department.departmentName'},
+                    {
+                      title: 'Job Title', 
+                      field: 'job.jobTitle'
+                      // render: rowData => (
+                      //   rowData.job ? (
+                      //     rowData.jobs.map(job => {
+                      //       if(new Date(job.endDate) > Date.now()) {
+                      //         return job.jobTitle
+                      //       }
+                      //       return null
+                      //     })
+                      //   ) : null
+                      // )
+                    },
+                    {title: 'Mobile', field: 'user_personal_info.mobile'},
+                    {
+                      title: 'Status', 
+                      field: 'active',
+                      render: rowData => (
+                        rowData.active ? (
+                          <Badge pill variant="success">Active</Badge>
+                        ) : (
+                          <Badge pill variant="danger">Inactive</Badge>
+                        )
+                      )
+                    },
+                    {
+                      title: 'View',
+                      render: rowData => (
+                        <Form>
+                          <Button size="sm" variant="info" onClick={this.onView(rowData)}><i className="far fa-address-card"></i></Button>
+                        </Form>
+                      )
+                    },
+                    {
+                      title: 'Action',
+                      render: rowData => (
+                        <>
+                          <Button size="sm" variant="info" className="mr-2" onClick={this.onEdit(rowData)}><i className="far fa-edit"></i>Edit</Button>
+                          <Button size="sm" variant="danger" className="ml-1"><i className="far fa-bin"></i>Delete</Button>
+                        </>
+                      )
+                    }
+                  ]}
+                  data={this.state.users}
+                  options={{
+                    rowStyle: (rowData, index) => {
+                      if(index%2) {
+                        return {backgroundColor: '#f2f2f2'}
+                      }
+                    },
+                    pageSize: 10,
+                    pageSizeOptions: [10, 20, 30, 50, 75, 100]
+                  }}
+                  title="Employees"
+                />
+              </ThemeProvider>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     );
