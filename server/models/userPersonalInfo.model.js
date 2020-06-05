@@ -12,29 +12,21 @@ module.exports = (sequelize, Sequelize) => {
       },
       gender: {
         type: Sequelize.ENUM,
-        values: ['male', 'female'],
+        values: ['Male', 'Female'],
         allowNull: false
       },
       maritalStatus: {
         type: Sequelize.ENUM,
-        values: ['married', 'single', 'widowed'],
+        values: ['Married', 'Single', 'Widowed'],
         allowNull: false
       },
       fatherName: {
-          type: Sequelize.STRING,
-          allowNull: false
-      },
-      nationality: {
         type: Sequelize.STRING,
         allowNull: false
       },
       idNumber: {
         type: Sequelize.STRING,
         allowNull: false
-      },
-      photo: {
-        type: Sequelize.STRING,
-        allowNull: true
       },
       address: {
         type: Sequelize.STRING,
@@ -49,11 +41,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false
       },
       mobile: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: false
       },
       phone: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: true
       },
       emailAddress: {
