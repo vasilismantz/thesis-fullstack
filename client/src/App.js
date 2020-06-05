@@ -7,6 +7,10 @@ import Dashboard from "./components/Dashboard";
 import Layout from "./Layout/Layout";
 import EmployeeList from "./components/EmployeeList";
 import EmployeeAdd from "./components/EmployeeAdd";
+import EmployeeView from './components/EmployeeView'
+import EmployeeEdit from "./components/EmployeeEdit";
+import DepartmentList from "./components/DepartmentList"
+import ApplicationList from "./components/ApplicatonList"
 import Register from "./components/Register";
 import withAuth from "./withAuth";
 import Login from "./components/Login";
@@ -50,6 +54,10 @@ const DefaultContainer = () => (
         <Route exact path="/" component={withAuth(Dashboard)} />
         <Route exact path="/employee-list" component={withAuth(EmployeeList)} />
         <Route exact path="/employee-add" component={withAuth(EmployeeAdd)} />
+        <Route exact path="/employee-view" component={withAuth(EmployeeView)} />
+        <Route exact path="/employee-edit" component={withAuth(EmployeeEdit)} />
+        <Route exact path="/departments" component={withAuth(DepartmentList)} />
+        <Route exact path="/application-list" component={withAuth(ApplicationList)} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
       </Switch>
