@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from 'react-router-dom'
 import { Alert } from "react-bootstrap";
 import axios from "axios";
 
@@ -12,6 +13,7 @@ export default class Login extends Component {
       passwordShow: false,
       hasError: false,
       errorMessage: "",
+      done: false
     };
 
     this.onChange = this.onChange.bind(this);
@@ -49,7 +51,7 @@ export default class Login extends Component {
     })
       .then((res) => {
         localStorage.setItem('token', res.data.token)
-        this.props.history.push('/')
+        this.setState({done: true})
       })
       .catch((err) => {
         console.log(err.response);
@@ -64,7 +66,8 @@ export default class Login extends Component {
     return (
       <div className="register-box">
         <div className="register-logo">
-          <a href="../../index2.html">
+          <a href="/">
+            {this.state.done ? <Redirect to="/" /> : <></>}
             <b>HR</b>MS{" "}
             <small style={{ fontSize: "10px" }}>by Mantzaris Vasileios</small>
           </a>
