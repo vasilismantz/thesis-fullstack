@@ -27,8 +27,6 @@ export default class ShowEventPopup extends Component {
         description: this.props.data.description,
         startDate: this.props.data.start,
         endDate: this.props.data.end
-    }, () => {
-        console.log(this.state)
     }) 
   }
 
@@ -103,7 +101,7 @@ export default class ShowEventPopup extends Component {
     return (
       <Modal
         {...this.props}
-        size="lg"
+        size="md"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -146,8 +144,8 @@ export default class ShowEventPopup extends Component {
                     />
                 </Form.Group>
 
-                <Form.Group controlId="formStartDate">
-                    <Form.Label>Start Date <span style={{ color: "red" }}>*</span></Form.Label>
+                <Form.Group controlId="formStartDate mt-1">
+                    <Form.Label className="required">Start Date</Form.Label>
                     <DatePicker
                         selected={this.state.startDate}
                         onChange={newStartDate => this.setState({ startDate: newStartDate })}
@@ -182,7 +180,7 @@ export default class ShowEventPopup extends Component {
                     />
                 </Form.Group>
 
-                <Form.Text className="mb-3"><span style={{ color: "red" }}>*</span> Required Fields</Form.Text>
+                <Form.Text className="mb-3 required">Required Fields</Form.Text>
                 <Button variant="success" type="submit">
                     Submit
             </Button>
