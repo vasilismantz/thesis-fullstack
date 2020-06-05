@@ -3,7 +3,7 @@ var router = express.Router();
 
 const withAuth = require("../withAuth")
 
-const personalInformation = require("../controllers/userPersonalEvent.controller.js");
+const personalInformation = require("../controllers/userPersonalInformation.controller.js");
 
 // Create a new User Personal Information
 router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, personalInformation.create);

@@ -3,7 +3,7 @@ var router = express.Router();
 
 const withAuth = require("../withAuth")
 
-const financialInformation = require("../controllers/userFinancialEvent.controller.js");
+const financialInformation = require("../controllers/userFinancialInformation.controller");
 
 // Create a new User Financial Information
 router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, financialInformation.create);
