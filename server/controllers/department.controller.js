@@ -1,5 +1,7 @@
 const db = require("../models");
 const Department = db.department;
+const User = db.user;
+const Job = db.job;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Department
@@ -33,7 +35,14 @@ exports.create = (req, res) => {
 
 // Retrieve all Departments from the database.
 exports.findAll = (req, res) => {
-  Department.findAll()
+  Department.findAll({
+    include: [{
+      model: User,
+      include: {
+        model: Job
+      }
+    }]
+  })
     .then(data => {
       res.send(data);
     })
@@ -88,6 +97,18 @@ exports.update = (req, res) => {
 // Delete an Department with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
+
+  User.findAll({
+    where: {departmentId: id}
+  })
+  .then(users => {
+    if(users) {
+      users.map(user => {
+        user.departmentId = null;
+        user.save();
+      })
+    }
+  })
 
   Department.destroy({
     where: { id: id }
