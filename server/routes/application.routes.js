@@ -5,6 +5,9 @@ const withAuth = require('../withAuth')
 
 const application = require("../controllers/application.controller.js");
 
+// Retrieve all applications
+router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, application.findAll)
+
 // Create a new Application
 router.post('/', withAuth.verifyToken, application.create);
 
@@ -22,6 +25,8 @@ router.put('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, applic
 
 // Delete all Applications
 router.delete('/', withAuth.verifyToken, withAuth.withRoleAdmin, application.deleteAll);
+
+router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, application.delete)
 
 // Delete all Application by User Id
 router.delete('/user/:id', withAuth.verifyToken, withAuth.withRoleAdmin, application.deleteAllByUserId);
