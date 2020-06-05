@@ -12,8 +12,8 @@ export default class Dashboard extends Component {
     super(props)
 
     this.state = {
-      totalEmployees: '',
-      totalExpenses: '',
+      totalEmployees: 0,
+      totalExpenses: 0,
       recentApplications: []
     }
   }
@@ -40,8 +40,11 @@ export default class Dashboard extends Component {
     })
     .then(res => {
       let array = res.data
-      let sum = array.reduce((a, b) => ({expenses: parseInt(a.expenses) + parseInt(b.expenses)}))
-      this.setState({totalExpenses: sum.expenses})
+      if(array.length>0){
+        let sum = array.reduce((a, b) => ({expenses: parseInt(a.expenses) + parseInt(b.expenses)}))
+        this.setState({totalExpenses: sum.expenses})
+      } else {
+      }
     })
   }
   render() {    
