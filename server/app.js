@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var fs = require('fs')
 
 var cors = require('cors')
 
@@ -12,8 +13,11 @@ require('dotenv').config()
 var indexRouter = require('./routes/index');
 var api = require('./routes/api');
 var login = require('./routes/login/login.routes');
+var upload = require('./routes/upload.routes')
 
 var app = express();
+
+global.__basedir = __dirname
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,6 +36,8 @@ var corsOptions = {
 
 app.use(cors(corsOptions))
 
+// db.sequelize.sync()
+
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and re-sync db.");
 // });
@@ -39,6 +45,7 @@ app.use(cors(corsOptions))
 app.use('/', indexRouter);
 app.use('/api', api);
 app.use('/login', login)
+app.use('/upload', upload)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
