@@ -1,5 +1,5 @@
 const db = require("../models");
-const UserFinancialInformation = db.userFinancialInformation;
+const UserFinancialInformation = db.userFinancialInfo;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new User
@@ -14,8 +14,8 @@ exports.create = (req, res) => {
 
   // Create an UserFinancialInformation
   const userFinancialInformation = {
-    employmentType: req.body.employmentType,
-    salaryBasic: req.body.salaryBasic,
+    employmentType: req.body.employmentTypen,
+    salaryBasic: req.body.salaryBasic ,
     salaryGross: req.body.salaryGross,
     salaryNet: req.body.salaryNet,
     allowanceHouseRent: req.body.allowanceHouseRent,
@@ -33,16 +33,25 @@ exports.create = (req, res) => {
   };
 
   // Save UserFinancialInformation in the database
-  UserFinancialInformation.create(userFinancialInformation)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the UserFinancialInformation."
-      });
-    });
+  UserFinancialInformation.findOne({
+    where: {userId: userFinancialInformation.userId}
+  }).
+  then(user => {
+    if(!user) {
+      UserFinancialInformation.create(userFinancialInformation)
+        .then(data => {
+          res.send(data);
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the UserFinancialInformation."
+          });
+        });
+    } else {
+      res.status(403).send({message: "Financial Information Already Exists for this User"})
+    }
+  })
 };
 
 // Retrieve all User Financial Informations from the database.
