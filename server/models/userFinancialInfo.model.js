@@ -8,28 +8,28 @@ module.exports = (sequelize, Sequelize) => {
       },
       employmentType: {
         type: Sequelize.ENUM,
-        values: ['fullTime', 'partTime'],
-        allowNull: false
+        values: ['Full Time', 'Part Time'],
+        allowNull: true
       },
       salaryBasic: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       salaryGross: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       salaryNet: {
           type: Sequelize.INTEGER,
-          allowNull: false
+          allowNull: true
       },
       allowanceHouseRent: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       allowanceMedical: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       allowanceSpecial: {
         type: Sequelize.INTEGER,
@@ -37,19 +37,19 @@ module.exports = (sequelize, Sequelize) => {
       },
       allowanceFuel: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       allowancePhoneBill: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       allowanceOther: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       allowanceTotal: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       deductionProvidentFund: {
         type: Sequelize.INTEGER,
@@ -57,31 +57,31 @@ module.exports = (sequelize, Sequelize) => {
       },
       deductionTax: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       deductionOther: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       deductionTotal: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       bankName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       accountName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       accountNumber: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+        type: Sequelize.STRING,
+        allowNull: true
       },
       iban: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+        type: Sequelize.BIGINT,
+        allowNull: true
       }
     }, {
         timestamps: false,
