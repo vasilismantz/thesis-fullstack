@@ -1,5 +1,6 @@
 const db = require("../models");
 const Job = db.job;
+const JobOld = db.jobOld
 const Op = db.Sequelize.Op;
 
 // Create and Save a new User
@@ -13,25 +14,56 @@ exports.create = (req, res) => {
   }
 
   // Create a Job
-  const job = {
+  const newJob = {
     jobTitle: req.body.jobTitle,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
     departmentId: req.body.departmentId,
-    organizationId: req.body.organizationId
+    userId: req.body.userId
   };
 
-  // Save Job in the database
-  Job.create(job)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Job."
+  Job.findOne({
+    where: {userId: req.body.userId}
+  })
+  .then(job => {
+    if(job) {
+      if(new Date(job.endDate) > Date.now()) {
+        job.endDate = Date.now()
+      }
+      JobOld.create(job)
+        .then(res => {
+          Job.destroy({where: {
+            id: job.id
+          }})
+            .catch(err => {
+              res.status(500).send({
+                message:
+                  err.message || "Some error occurred while destroying the Job."
+              })
+            })
+
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the Job."
+          })
+        })
+    }
+
+    // Save Job in the database
+    Job.create(job)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the Job."
+        });
       });
-    });
+  })
+
 };
 
 // Retrieve all Jobs from the database.
