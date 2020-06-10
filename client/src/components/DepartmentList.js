@@ -7,6 +7,7 @@ import axios from 'axios'
 import MaterialTable from 'material-table'
 import { ThemeProvider } from '@material-ui/core'
 import { createMuiTheme } from '@material-ui/core/styles'
+import AlertModal from './AlertModal'
 
 export default class DepartmentList extends Component {
 
@@ -20,7 +21,8 @@ export default class DepartmentList extends Component {
             hasError: false,
             errorMsg: '',
             completed: false,
-            showModel: false
+            showEditModel: false,
+            showAlertModel: false
         }
     }
 
@@ -37,18 +39,15 @@ export default class DepartmentList extends Component {
 
     pushSelectItems = (department) => {
         let items= []
-        department.users.map((user, index) => {
-            if(user.job){
-                items.push(<option key={index}>{user.job.jobTitle} - {user.fullName}</option>)
+        department.users.map(user => {
+            if(user.jobs){
+                user.jobs.map((job, index) => {
+                    if(new Date(job.startDate) <= Date.now() && new Date(job.endDate) >= Date.now()) {
+                        items.push(<option key={index}>{job.jobTitle} - {user.fullName}</option>)
+                    }
+                })
             }
         })
-        // department.users.map(user => {
-        //     user.jobs.map((job, index) => {
-        //         if(new Date(job.startDate) <= Date.now() && new Date(job.endDate) >= Date.now() ) {
-        //             items.push(<option key={index}>{job.jobTitle} - {user.fullName}</option>)
-        //         }
-        //     })
-        // })
         return items
     }
 
@@ -63,23 +62,29 @@ export default class DepartmentList extends Component {
     onDelete (department) {
         return event => {
             event.preventDefault()
+
+            if(department.users.length > 0) {
+                this.setState({showAlertModel: true})
+            } else {
+                axios({
+                    method: 'delete',
+                    url: '/api/departments/'  + department.id,
+                    headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+                })
+                .then(res => {
+                    this.setState({completed: true})
+                })
+                .catch(err => {
+                    this.setState({hasError: true, errorMsg: err.response.data.message})
+                })
+            }
             
-            axios({
-                method: 'delete',
-                url: '/api/departments/'  + department.id,
-                headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
-            })
-            .then(res => {
-                this.setState({completed: true})
-            })
-            .catch(err => {
-                this.setState({hasError: true, errorMsg: err.response.data.message})
-            })
         }
     }
     
   render() {
-    let closeModel = () => this.setState({showModel: false})
+    let closeEditModel = () => this.setState({showEditModel: false})
+    let closeAlertModel = () => this.setState({showAlertModel: false})
 
     const theme = createMuiTheme({
         overrides: {
@@ -157,49 +162,13 @@ export default class DepartmentList extends Component {
                             title="Departments"
                     />
                     </ThemeProvider>
-
-                    {/* <Table striped bordered size="sm">
-                        <thead>
-                            <tr className="d-flex">
-                                <th className="text-muted col-1">DEPT ID</th>
-                                <th className="text-muted col-5">Department Name</th>
-                                <th className="text-muted col-4">Job List</th>
-                                <th className="text-muted col-2">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.departments.map((department, index) => {
-                                return(
-                                    <tr key={index} className="d-flex">
-                                        <td className="col-1"><b>{department.id}</b></td>
-                                        <td className="col-5"><b>{department.departmentName}</b></td>
-                                        <td className="col-4">
-                                            <select className="select-css">
-                                                {this.pushSelectItems(department)}
-                                            </select>
-                                        </td>
-                                        <td className="col-2">
-                                            <Form className="" onSubmit={this.onEdit(department)}>
-                                                <div className="row">
-                                                    <div className="col pl-5">
-                                                        <Button variant="info" type="submit"><i className="far fa-edit"></i></Button>
-                                                    </div>
-                                                    <div className="col pr-5">
-                                                        <Button variant="danger" onClick={this.onDelete(department)}><i className="fas fa-trash"></i></Button>
-                                                    </div>
-                                                </div>
-                                            </Form>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </Table> */}
                 </Card.Body>
             </Card>
-            {this.state.showModel ? (
-                <EditDepartmentModal show={true} onHide={closeModel} data={this.state.selectedDepartment} />
-            ): (<></>)}
+            {this.state.showEditModel ? (
+                <EditDepartmentModal show={true} onHide={closeEditModel} data={this.state.selectedDepartment} />
+            ) : this.state.showAlertModel ? (
+                <AlertModal show={true} onHide={closeAlertModel} />
+            ) : (<></>)}
             </div>
         </div>
         {this.state.hasError ? (
