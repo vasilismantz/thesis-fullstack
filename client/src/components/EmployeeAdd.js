@@ -23,21 +23,38 @@ export default class EmployeeAdd extends Component {
       address: "",
       country: "",
       city: "",
-      mobile: "",
+      mobile: null,
       phone: null,
       email: "",
       username: "",
       password: "",
       role: "",
       department: "",
-      job: "",
+      departmentId: null,
+      startDate: "",
+      endDate: "",
+      departments: [],
+      jobTitle: null,
       joiningDate: "",
-      endingDate: "",
       file: null,
       hasError: false,
       errMsg: "",
       completed: false
     };
+  }
+
+  componentDidMount() {
+    axios({
+      method: 'get',
+      url: '/api/departments',
+      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+    })
+    .then(res => {
+      this.setState({departments: res.data})
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   handleChange = (event) => {
@@ -62,6 +79,7 @@ export default class EmployeeAdd extends Component {
       password: 1234,
       fullname: this.state.fistname + ' ' + this.state.lastname,
       role: this.state.role,
+      departmentId: this.state.departmentId,
       active: 1
     }
 
@@ -114,8 +132,26 @@ export default class EmployeeAdd extends Component {
           headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
         })
         .then(res => {
-          this.setState({completed: true})
-          window.scrollTo(0, 0)
+          let job = {
+            jobTitle: this.state.jobTitle,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+            userId: userId
+          }
+          axios({
+            method: 'post',
+            url: 'api/jobs/',
+            data: job,
+            headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+          })
+          .then(res => {
+            this.setState({completed: true})
+            window.scrollTo(0, 0)
+          })
+          .catch(err => {
+            this.setState({hasError: true, errMsg: err.response.data.message})
+            window.scrollTo(0, 0)
+          })
         })
         .catch(err => {
           this.setState({hasError: true, errMsg: err.response.data.message})
@@ -131,6 +167,14 @@ export default class EmployeeAdd extends Component {
       this.setState({hasError: true, errMsg: err.response.data.message})
       window.scrollTo(0, 0)
     })
+  }
+
+  pushDepartments = () => {
+    let items = []
+    this.state.departments.map((dept, index) => {
+      items.push(<option key={index} value={dept.id}>{dept.departmentName}</option>)
+    })
+    return items;
   }
 
   render() {
@@ -454,6 +498,21 @@ export default class EmployeeAdd extends Component {
                             required
                           />
                         </Form.Group>
+                        <Form.Group controlId="formDepartment">
+                          <Form.Label className="text-muted required">
+                            Department
+                          </Form.Label>
+                          <Form.Control
+                            as="select"
+                            value={this.state.departmentId}
+                            onChange={this.handleChange}
+                            name="departmentId"
+                            required
+                          >
+                            <option value="" defaultValue>Choose...</option>
+                            {this.pushDepartments()}
+                          </Form.Control>
+                        </Form.Group>
                         <Form.Group controlId="formRole">
                           <Form.Label className="text-muted required">
                             Role
@@ -477,6 +536,66 @@ export default class EmployeeAdd extends Component {
                   <Button variant="primary" type="submit" block>
                     Submit
                   </Button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-sm-6">
+                  <Card className="secondary-card">
+                    <Card.Header>Job</Card.Header>
+                    <Card.Body>
+                      <Card.Text>
+                        <Form.Group controlId="formJobTitle">
+                          <Form.Label className="text-muted required">Job Title</Form.Label>
+                          <Form.Control
+                            type="text"
+                            value={this.state.jobTitle}
+                            onChange={this.handleChange}
+                            name="jobTitle"
+                            placeholder="Enter Job Title"
+                          />
+                        </Form.Group>
+                        <Form.Group controlId="formJobStart">
+                          <Form.Label className="text-muted required">
+                            Start Date
+                          </Form.Label>
+                          <Form.Row>
+                            <DatePicker
+                              selected={this.state.startDate}
+                              onChange={startDate => this.setState({startDate})}
+                              dropdownMode="select"
+                              timeFormat="HH:mm"
+                              name="startDate"
+                              timeCaption="time"
+                              dateFormat="yyyy-MM-dd"
+                              className="form-control ml-1"
+                              placeholderText="Select Date Of Birth"
+                              autoComplete="off"
+                              required
+                            />
+                          </Form.Row>
+                        </Form.Group>
+                        <Form.Group controlId="formJobEnd">
+                          <Form.Label className="text-muted required">
+                            End Date
+                          </Form.Label>
+                          <Form.Row>
+                            <DatePicker
+                              selected={this.state.endDate}
+                              onChange={endDate => this.setState({endDate})}
+                              dropdownMode="select"
+                              timeFormat="HH:mm"
+                              name="endDate"
+                              timeCaption="time"
+                              dateFormat="yyyy-MM-dd"
+                              className="form-control ml-1"
+                              placeholderText="Select Date Of Birth"
+                              autoComplete="off"
+                            />
+                          </Form.Row>
+                        </Form.Group>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
                 </div>
               </div>
             </Card.Body>
