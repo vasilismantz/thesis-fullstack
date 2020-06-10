@@ -27,6 +27,6 @@ export default class AlertModal extends Component {
           <Button onClick={this.props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
-    );
+    )
   }
 }
