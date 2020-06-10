@@ -201,23 +201,23 @@ div.myDiv input {
 }
 
 #emp-view-personal .form-label {
-  padding-left: 100px;
+  padding-left: 7.6rem;
 }
 
 #emp-view-personal .form-group:nth-child(1) span {
-  padding-left: 84px;
+  padding-left: 6.26em;
 }
 
 #emp-view-personal .form-group:nth-child(2) span {
-  padding-left: 120px;
+  padding-left: 8.9em;
 }
 
 #emp-view-personal .form-group:nth-child(3) span {
-  padding-left: 80px;
+  padding-left: 5.8em;
 }
 
 #emp-view-personal .form-group:nth-child(4) span {
-  padding-left: 77px;
+  padding-left: 5.7em;
 }
 
 #emp-view-contact .form-label {
