@@ -41,11 +41,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false
       },
       mobile: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.STRING,
         allowNull: false
       },
       phone: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.STRING,
         allowNull: true
       },
       emailAddress: {
