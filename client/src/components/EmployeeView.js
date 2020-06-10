@@ -50,7 +50,7 @@ export default class EmployeeView extends Component {
                     if(user.jobs) {
                         let jobs = user.jobs
                         jobs.map(job => {
-                            if(new Date(job.startDate) < Date.now() && new Date(job.endDate) > Date.now()) {
+                            if(new Date(job.startDate) <= Date.now() && new Date(job.endDate) >= Date.now()) {
                                 this.setState({job: job})
                             }
                         })
