@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-import { Redirect } from 'react-router-dom'
+import { Redirect, NavLink } from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import axios from 'axios'
 import moment from 'moment'
@@ -178,7 +178,6 @@ export default class EmployeeEdit extends Component {
       headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
     })
     .then(res => {
-      console.log(res)
  
       let user_id = res.data.id
 
@@ -197,8 +196,6 @@ export default class EmployeeEdit extends Component {
         userId: user_id
       }    
 
-      console.log('userPersonalInfo', userPersonalData)
-
       axios({
         method: 'put',
         url: '/api/personalInformations/' + this.state.userPersonalInfo.id,
@@ -206,9 +203,6 @@ export default class EmployeeEdit extends Component {
         headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
       })
       .then(res => {
-
-        console.log(res)
-
         let userFinancialInfo = {
           bankName: this.state.userFinancialInfo.bankName,
           accountName: this.state.userFinancialInfo.accountName,
@@ -224,8 +218,7 @@ export default class EmployeeEdit extends Component {
           headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
         })
         .then(res => {
-          console.log(res)
-          // this.setState({completed: true})
+          this.setState({completed: true})
         })
         .catch(err => {
           this.setState({hasError: true, errMsg: err.data.message})
@@ -548,6 +541,12 @@ export default class EmployeeEdit extends Component {
                             {this.pushDepartments()}
                           </Form.Control>
                         </Form.Group>
+                        <Form.Group controlId="formEmployeeId">
+                          <Form.Label className="text-muted">
+                            Current Job
+                          </Form.Label>
+                          <div>{this.state.job.jobTitle} <NavLink to="/">(Change Job)</NavLink></div>
+                        </Form.Group>
                         <Form.Group controlId="formRole">
                           <Form.Label className="text-muted required">
                             Role
@@ -560,9 +559,9 @@ export default class EmployeeEdit extends Component {
                             required
                           >
                             <option value="">Choose...</option>
-                            <option value="ROLE_ADMIN">Admin</option>
-                            <option value="ROLE_MANAGER">Manager</option>
                             <option value="ROLE_EMPLOYEE">Employee</option>
+                            <option value="ROLE_MANAGER">Manager</option>
+                            <option value="ROLE_ADMIN">Admin</option>
                           </Form.Control>
                         </Form.Group>
                       </Card.Text>
