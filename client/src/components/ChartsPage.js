@@ -76,7 +76,20 @@ export default class NewChartsPage extends React.Component {
           <Bar
             data={this.state.chartData}
             height={300}
-            options={{ maintainAspectRatio: false }}
+            options={{ 
+              maintainAspectRatio: false,
+              legend: {
+                display: false
+              },
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    min: 0,
+                    stepSize: 300
+                  }
+                }]
+              }
+            }}
             redraw
           />
         </div>
