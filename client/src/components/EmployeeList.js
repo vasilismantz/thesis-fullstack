@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Card, Badge, Button, Form } from "react-bootstrap";
+import { Card, Badge, Button, Form, Modal } from "react-bootstrap";
 import {Redirect} from 'react-router-dom'
 import MaterialTable from 'material-table'
+import DeleteModal from './DeleteModal'
 import axios from 'axios'
 import { ThemeProvider } from '@material-ui/core'
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -15,7 +16,8 @@ export default class EmployeeList extends Component {
       users: [],
       selectedUser: null,
       viewRedirect: false,
-      editRedirect: false
+      editRedirect: false,
+      deleteModal: false
     }
   }
 
@@ -26,9 +28,7 @@ export default class EmployeeList extends Component {
       headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
     })
     .then(res => {
-      this.setState({users: res.data}, () => {
-        console.log(this.state.users)
-      })
+      this.setState({users: res.data})
     })
     .catch(err => {
       console.log(err)
@@ -51,7 +51,17 @@ export default class EmployeeList extends Component {
     }
   }
 
+  onDelete = user => {
+    return event => {
+      event.preventDefault()
+
+      this.setState({selectedUser: user, deleteModal: true})
+    }
+  }
+
   render() {
+
+    let closeDeleteModel = () => this.setState({deleteModal: false})
 
     const theme = createMuiTheme({
         overrides: {
@@ -67,6 +77,9 @@ export default class EmployeeList extends Component {
       <div className="container-fluid pt-4">
         {this.state.viewRedirect ? (<Redirect to={{pathname: '/employee-view', state: {selectedUser: this.state.selectedUser}}}></Redirect>) : (<></>)}
         {this.state.editRedirect ? (<Redirect to={{pathname: '/employee-edit', state: {selectedUser: this.state.selectedUser}}}></Redirect>) : (<></>)}
+        {this.state.deleteModal ? (
+          <DeleteModal show={true} onHide={closeDeleteModel} data={this.state.selectedUser} />
+        ) :(<></>)}
         <h4>
           <a className="fa fa-plus mb-2 ml-2" href="/employee-add">
             Add Employee
@@ -85,20 +98,17 @@ export default class EmployeeList extends Component {
                   columns={[
                     {title: 'EMP ID', field: 'id'},
                     {title: 'Full Name', field: 'fullName'},
-                    {title: 'Dept. > Job', field: 'department.departmentName'},
+                    {title: 'Department', field: 'department.departmentName'},
                     {
                       title: 'Job Title', 
-                      field: 'job.jobTitle'
-                      // render: rowData => (
-                      //   rowData.job ? (
-                      //     rowData.jobs.map(job => {
-                      //       if(new Date(job.endDate) > Date.now()) {
-                      //         return job.jobTitle
-                      //       }
-                      //       return null
-                      //     })
-                      //   ) : null
-                      // )
+                      field: 'jobs',
+                      render: rowData => (
+                        rowData.jobs.map((job, index) => {
+                          if(new Date(job.startDate) <= Date.now() && new Date(job.endDate) >= Date.now()) {
+                            return job.jobTitle
+                          }
+                        })
+                      )
                     },
                     {title: 'Mobile', field: 'user_personal_info.mobile'},
                     {
@@ -125,7 +135,9 @@ export default class EmployeeList extends Component {
                       render: rowData => (
                         <>
                           <Button size="sm" variant="info" className="mr-2" onClick={this.onEdit(rowData)}><i className="far fa-edit"></i>Edit</Button>
-                          <Button size="sm" variant="danger" className="ml-1"><i className="far fa-bin"></i>Delete</Button>
+                          {rowData.id !== JSON.parse(localStorage.getItem('user')).id ? (
+                            <Button size="sm" variant="danger" className="ml-1" onClick={this.onDelete(rowData)}><i className="far fa-bin"></i>Delete</Button>
+                          ):(<></>)}
                         </>
                       )
                     }
