@@ -55,7 +55,7 @@ export default class DepartmentList extends Component {
         return event=> {
             event.preventDefault()
             
-            this.setState({selectedDepartment: department, showModel: true})
+            this.setState({selectedDepartment: department, showEditModel: true})
         }
     }
 
@@ -137,9 +137,9 @@ export default class DepartmentList extends Component {
                                 {
                                     title: 'Action',
                                     render: rowData => (
-                                        <Form className="row" onSubmit={this.onEdit(rowData)}>
+                                        <Form className="row">
                                             <div className="col pl-5">
-                                                <Button type="submit" size="sm" variant="info"><i className="fas fa-edit"></i>Edit</Button>
+                                                <Button size="sm" variant="info" onClick={this.onEdit(rowData)}><i className="fas fa-edit"></i>Edit</Button>
                                             </div>
                                             <div className="col pr-5">
                                                 <Button onClick={this.onDelete(rowData)} size="sm" variant="danger"><i className="fas fa-trash"></i>Delete</Button>
