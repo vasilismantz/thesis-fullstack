@@ -177,7 +177,7 @@ export default class EmployeeView extends Component {
                                                                 Mobile: 
                                                             </Form.Label>
                                                             <span>
-                                                                {this.state.userPersonalInfo.mobile}
+                                                                {this.state.userPersonalInfo.mobile} {this.state.userPersonalInfo.phone ? (' (' + this.state.userPersonalInfo.phone + ')') : null} 
                                                             </span>
                                                         </Form.Group>
                                                         <Form.Group as={Row}>
