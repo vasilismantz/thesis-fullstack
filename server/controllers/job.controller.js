@@ -1,14 +1,14 @@
 const db = require("../models");
 const Job = db.job;
-const JobOld = db.jobOld
 const Op = db.Sequelize.Op;
+const moment= require('moment')
 
 // Create and Save a new User
 exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
     return;
   }
@@ -16,97 +16,99 @@ exports.create = (req, res) => {
   // Create a Job
   const newJob = {
     jobTitle: req.body.jobTitle,
-    startDate: req.body.startDate,
-    endDate: req.body.endDate,
-    departmentId: req.body.departmentId,
-    userId: req.body.userId
+    startDate: moment(req.body.startDate).format('YYYY-MM-DD HH:mm:ss'),
+    endDate: moment(req.body.endDate).format('YYYY-MM-DD HH:mm:ss'),
+    userId: req.body.userId,
   };
 
   Job.findOne({
-    where: {userId: req.body.userId}
-  })
-  .then(job => {
-    if(job) {
-      if(new Date(job.endDate) > Date.now()) {
-        job.endDate = Date.now()
-      }
-      JobOld.create(job)
-        .then(res => {
-          Job.destroy({where: {
-            id: job.id
-          }})
-            .catch(err => {
-              res.status(500).send({
-                message:
-                  err.message || "Some error occurred while destroying the Job."
-              })
-            })
-
-        })
-        .catch(err => {
-          res.status(500).send({
-            message:
-              err.message || "Some error occurred while creating the Job."
-          })
-        })
+    where: {
+      [Op.and]: [
+        { userId: req.body.userId },
+        {startDate: {[Op.lte]: Date.now()}},
+        {endDate: 
+          {
+            [Op.or]: [
+              {[Op.gte]: Date.now()},
+              {[Op.is]: null}
+            ]
+          }
+        }
+      ]
     }
+  }).then((job) => {
+    if (job) {
 
-    // Save Job in the database
-    Job.create(job)
-      .then(data => {
-        res.send(data);
+      if(new Date(job.dataValues.endDate) > new Date(newJob.startDate)) {
+        job.dataValues.endDate = moment(newJob.startDate).subtract(1, "days");
+      }
+
+      Job.update(job.dataValues, {
+        where: { id: job.dataValues.id },
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the Job."
+            err.message || "Some error occurred while creating the Job.",
         });
       });
-  })
 
+    } else {
+      console.log('job not found')
+      
+    }
+
+    Job.create(newJob)
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message || "Some error occurred while creating the Job.",
+        });
+      });
+  });
 };
 
 // Retrieve all Jobs from the database.
 exports.findAll = (req, res) => {
   Job.findAll()
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving jobs."
+        message: err.message || "Some error occurred while retrieving jobs.",
       });
     });
 };
 
 //Retrieve all Jobs By User Id
 exports.findAllByUserId = (req, res) => {
-    const userId = req.params.id
+  const userId = req.params.id;
 
-    Job.findAll({where: {userId: userId}})
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving jobs."
-        });
+  Job.findAll({ where: { userId: userId } })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving jobs.",
       });
-  };
+    });
+};
 
 // Find a single Job with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Job.findByPk(id)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving Job with id=" + id
+        message: "Error retrieving Job with id=" + id,
       });
     });
 };
@@ -116,22 +118,22 @@ exports.update = (req, res) => {
   const id = req.params.id;
 
   Job.update(req.body, {
-    where: { id: id }
+    where: { id: id },
   })
-    .then(num => {
+    .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Job was updated successfully."
+          message: "Job was updated successfully.",
         });
       } else {
         res.send({
-          message: `Cannot update Job with id=${id}. Maybe Job was not found or req.body is empty!`
+          message: `Cannot update Job with id=${id}. Maybe Job was not found or req.body is empty!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error updating Job with id=" + id
+        message: "Error updating Job with id=" + id,
       });
     });
 };
@@ -141,22 +143,22 @@ exports.delete = (req, res) => {
   const id = req.params.id;
 
   Job.destroy({
-    where: { id: id }
+    where: { id: id },
   })
-    .then(num => {
+    .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Job was deleted successfully!"
+          message: "Job was deleted successfully!",
         });
       } else {
         res.send({
-          message: `Cannot delete Job with id=${id}. Maybe Tutorial was not found!`
+          message: `Cannot delete Job with id=${id}. Maybe Tutorial was not found!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Job with id=" + id
+        message: "Could not delete Job with id=" + id,
       });
     });
 };
@@ -165,34 +167,32 @@ exports.delete = (req, res) => {
 exports.deleteAll = (req, res) => {
   Job.destroy({
     where: {},
-    truncate: false
+    truncate: false,
   })
-    .then(nums => {
+    .then((nums) => {
       res.send({ message: `${nums} Jobs were deleted successfully!` });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all Jobs."
+        message: err.message || "Some error occurred while removing all Jobs.",
       });
     });
 };
 
 // Delete all Jobs by User Id.
 exports.deleteAllByUserId = (req, res) => {
-    const userId = req.params.id;
+  const userId = req.params.id;
 
-    Job.destroy({
-      where: {userId: userId},
-      truncate: false
+  Job.destroy({
+    where: { userId: userId },
+    truncate: false,
+  })
+    .then((nums) => {
+      res.send({ message: `${nums} Jobs were deleted successfully!` });
     })
-      .then(nums => {
-        res.send({ message: `${nums} Jobs were deleted successfully!` });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while removing all Jobs."
-        });
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while removing all Jobs.",
       });
-  };
+    });
+};
