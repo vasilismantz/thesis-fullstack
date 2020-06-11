@@ -93,6 +93,14 @@ export default class Sidebar extends Component {
                 </ul>
               </li>
               <li className="nav-item">
+                <NavLink to="/job-list" className="nav-link">
+                  <i className="nav-icon fas fa-briefcase" />
+                  <p>
+                    Job List
+                  </p>
+                </NavLink>
+              </li>
+              <li className="nav-item">
                 <NavLink to="/application-list" className="nav-link">
                   <i className="nav-icon fas fa-rocket" />
                   <p>
