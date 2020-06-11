@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, Button, Form, Alert } from "react-bootstrap";
-import { Redirect } from 'react-router-dom'
+import { Redirect, NavLink } from 'react-router-dom'
 import AddDepartment from './DepartmentAdd'
 import EditDepartmentModal from './EditDepartmentModal'
 import axios from 'axios'
@@ -35,20 +35,6 @@ export default class DepartmentList extends Component {
         .then(res => {
             this.setState({departments: res.data})
         })
-    }
-
-    pushSelectItems = (department) => {
-        let items= []
-        department.users.map(user => {
-            if(user.jobs){
-                user.jobs.map((job, index) => {
-                    if(new Date(job.startDate) <= Date.now() && new Date(job.endDate) >= Date.now()) {
-                        items.push(<option key={index}>{job.jobTitle} - {user.fullName}</option>)
-                    }
-                })
-            }
-        })
-        return items
     }
 
     onEdit (department) {
@@ -118,21 +104,10 @@ export default class DepartmentList extends Component {
                                 {title: 'DEPT ID', field: 'id'},
                                 {title: 'Department Name', field: 'departmentName'},
                                 {
-                                    title: 'Job list', 
-                                    field: 'jobs',
-                                    render: jobs => (
-                                        <select className="select-css">
-                                            {this.pushSelectItems(jobs)}
-                                        </select>
-                                    ),
-                                    cellStyle: {
-                                        paddingLeft: 30,
-                                        paddingRight: 50
-                                    },
-                                    headerStyle: {
-                                        paddingLeft: 30,
-                                        paddingRight: 30
-                                    }
+                                    title: 'Jobs', 
+                                    render: dept => (
+                                        <NavLink to={{ pathname: '/job-list', state: {selectedDepartment: dept.id}}}>Go to Job List</NavLink>
+                                    )
                                 },
                                 {
                                     title: 'Action',
