@@ -69,6 +69,8 @@ export default class EmployeeEdit extends Component {
                 if(user.jobs.length > 0) {
                   user.jobs.map((job, index) => {
                     if(new Date(job.startDate) <= Date.now() && new Date(job.endDate) >= Date.now()) {
+                      job.startDate = moment(new Date(job.startDate)).toDate()
+                      job.endDate = moment(new Date(job.endDate)).toDate()
                       this.setState({job: job})
                     }
                   })
@@ -218,7 +220,29 @@ export default class EmployeeEdit extends Component {
           headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
         })
         .then(res => {
-          this.setState({completed: true})
+          if(this.state.job.id !== null) {
+            let newJob = {
+              jobTitle: this.state.job.jobTitle,
+              startDate: this.state.job.startDate,
+              endDate: this.state.job.endDate
+            }
+            axios({
+              method: 'put',
+              url: 'api/jobs/' + this.state.job.id,
+              data: newJob,
+              headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+            })
+            .then(res => {
+              this.setState({completed: true})
+            })
+            .catch(err => {
+              console.log(err)
+              // this.setState({hasError: true, errMsg: err.data.message})
+              window.scrollTo(0, 0)
+            })
+          } else {
+            this.setState({completed: true})
+          }
         })
         .catch(err => {
           this.setState({hasError: true, errMsg: err.data.message})
@@ -238,7 +262,7 @@ export default class EmployeeEdit extends Component {
   }
 
   render() {
-    if(this.state.user.id === null || this.state.userPersonalInfo.id === null || this.state.userFinancialInfo.id === null || this.state.department.id === null || this.state.departments.length === 0 || this.state.job.id === null) {
+    if(this.state.user.id === null || this.state.userPersonalInfo.id === null || this.state.userFinancialInfo.id === null || this.state.department.id === null || this.state.departments.length === 0) {
       return <p>Loading...</p>
     }
     return (
@@ -570,6 +594,71 @@ export default class EmployeeEdit extends Component {
                   <Button variant="primary" type="submit" block>
                     Submit
                   </Button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-sm-6">
+                  <Card className="secondary-card">
+                    <Card.Header>Job <span classname="text-muted">(Warning! Only for editing current job)</span></Card.Header>
+                    <Card.Body>
+                      <Card.Text>
+                        <Form.Group controlId="formJobTitle">
+                          <Form.Label className="text-muted">Job Title</Form.Label>
+                          <Form.Control
+                            type="text"
+                            value={this.state.job.jobTitle}
+                            onChange={this.handleChangeJob}
+                            name="jobTitle"
+                            placeholder="Enter Job Title"
+                          />
+                        </Form.Group>
+                        <Form.Group controlId="formJobStart">
+                          <Form.Label className="text-muted">
+                            Start Date
+                          </Form.Label>
+                          <Form.Row>
+                            <DatePicker
+                              selected={this.state.job.startDate}
+                              onChange={startDate => this.setState(prevState => ({
+                                job: {
+                                  ...prevState.job,
+                                  startDate: startDate
+                                }
+                              }))}
+                              dropdownMode="select"
+                              name="startDate"
+                              dateFormat="yyyy-MM-dd"
+                              className="form-control ml-1"
+                              placeholderText="Select Start Date"
+                              autoComplete="off"
+                            />
+                          </Form.Row>
+                        </Form.Group>
+                        <Form.Group controlId="formJobEnd">
+                          <Form.Label className="text-muted">
+                            End Date
+                          </Form.Label>
+                          <Form.Row>
+                            <DatePicker
+                              selected={this.state.job.endDate}
+                              onChange={endDate => this.setState(prevState => ({
+                                job: {
+                                  ...prevState.job,
+                                  endDate: endDate
+                                }
+                              }))}
+                              dropdownMode="select"
+                              name="endDate"
+                              dateFormat="yyyy-MM-dd"
+                              className="form-control ml-1"
+                              placeholderText="Select End Date"
+                              autoComplete="off"
+                            />
+                          </Form.Row>
+                        </Form.Group>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
                 </div>
               </div>
             </Card.Body>
