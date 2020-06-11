@@ -39,7 +39,10 @@ exports.findAll = (req, res) => {
     include: [{
       model: User,
       include: {
-        model: Job
+        model: Job,
+        include: {
+          model: User
+        }
       }
     }]
   })
@@ -58,7 +61,17 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Department.findByPk(id)
+  Department.findByPk(id, {
+    include: [{
+      model: User,
+      include: {
+        model: Job,
+        include: {
+          model: User
+        }
+      }
+    }]
+  })
     .then(data => {
       res.send(data);
     })
