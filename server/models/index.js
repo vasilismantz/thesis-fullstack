@@ -62,6 +62,7 @@ db.userMessage.belongsTo(db.user, {foreignKey: {name:'sender', allowNull: false}
 
 // Job Associations
 db.job.hasMany(db.payment, {foreginKey: {allowNull: true}})
+db.job.belongsTo(db.user, {foreignKey: {allowNull: false}})
 
 // Application Associations
 db.application.belongsTo(db.user)
