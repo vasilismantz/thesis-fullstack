@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Card, Button, Form, Alert, Badge } from "react-bootstrap";
 import { Redirect } from 'react-router-dom'
-import AddDepartment from './DepartmentAdd'
+import JobAddModal from './JobAddModal'
 import JobEditModal from './JobEditModal'
+import JobDeleteModal from './JobDeleteModal'
 import axios from 'axios'
 import moment from 'moment'
 import MaterialTable from 'material-table'
@@ -20,6 +21,9 @@ export default class JobList extends Component {
             selectedDepartment: null,
             selectedJob: null,
             jobs: [],
+            showEditModel: false,
+            showAddModel: false,
+            showDeleteModel: false
         }
     }
 
@@ -98,7 +102,7 @@ export default class JobList extends Component {
 
     pushSelectItems = () => {
         let items= []
-        items.push(<option value="all">All departments</option>)
+        items.push(<option key={584390} value="all">All departments</option>)
         this.state.departments.map((dept, index) => {
             if(this.state.selectedDepartment === dept.id) {
                 items.push(<option key={index} value={dept.id} defaultValue>{dept.departmentName}</option>)
@@ -127,32 +131,40 @@ export default class JobList extends Component {
         }
     }
 
-    // onDelete (department) {
-    //     return event => {
-    //         event.preventDefault()
+    addJob = () => {
+        this.setState({showAddModel: true})
+    }
 
-    //         if(department.users.length > 0) {
-    //             this.setState({showAlertModel: true})
-    //         } else {
-    //             axios({
-    //                 method: 'delete',
-    //                 url: '/api/departments/'  + department.id,
-    //                 headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
-    //             })
-    //             .then(res => {
-    //                 this.setState({completed: true})
-    //             })
-    //             .catch(err => {
-    //                 this.setState({hasError: true, errorMsg: err.response.data.message})
-    //             })
-    //         }
+    onDelete (job) {
+        return event => {
+            event.preventDefault()
+            this.setState({selectedJob: job}, () => {
+                this.setState({showDeleteModel: true})
+            })
+
+            // if(department.users.length > 0) {
+            //     this.setState({showAlertModel: true})
+            // } else {
+            //     axios({
+            //         method: 'delete',
+            //         url: '/api/departments/'  + department.id,
+            //         headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+            //     })
+            //     .then(res => {
+            //         this.setState({completed: true})
+            //     })
+            //     .catch(err => {
+            //         this.setState({hasError: true, errorMsg: err.response.data.message})
+            //     })
+            // }
             
-    //     }
-    // }
+        }
+    }
     
   render() {
     let closeEditModel = () => this.setState({showEditModel: false})
-    let closeAlertModel = () => this.setState({showAlertModel: false})
+    let closeAddModel = () => this.setState({showAddModel: false})
+    let closeDeleteModel = () => this.setState({showDeleteModel: false})
 
     const theme = createMuiTheme({
         overrides: {
@@ -174,7 +186,7 @@ export default class JobList extends Component {
                         <Card.Text>
                             <select 
                                 className="select-css"
-                                value={this.state.selectedDepartment}
+                                value={this.state.selectedDepartment || ''}
                                 onChange={this.handleChange}
                             >
                                 <option value="">Choose one...</option>
@@ -187,6 +199,11 @@ export default class JobList extends Component {
         </div>
         <div className="row">
             <div className="col-sm-12">
+                <h4>
+                    <a className="fa fa-plus mb-2 ml-2" onClick={this.addJob} style={{color: 'blue', cursor: 'pointer'}}>
+                        Add Job
+                    </a>
+                </h4>
             <Card className="main-card">
                 <Card.Header>
                 <div className="panel-title">
@@ -204,9 +221,10 @@ export default class JobList extends Component {
                                 {title: 'End Date', field: 'endDate'},
                                 {
                                     title: 'State', 
+                                    field: 'endDate',
                                     render: job => (
-                                    new Date(job.startDate) > Date.now() ? (<Badge variant="warning">Future Job</Badge>) : (
-                                        new Date(job.endDate) >= Date.now() ? (<Badge variant="success">Current Job</Badge>) : (
+                                    new Date(job.startDate).getDate() > new Date().getDate() ? (<Badge variant="warning">Future Job</Badge>) : (
+                                        new Date(job.endDate).getDate() >= new Date().getDate() ? (<Badge variant="success">Current Job</Badge>) : (
                                             <Badge variant="danger">Old Job</Badge>
                                         )
                                     )
@@ -227,9 +245,9 @@ export default class JobList extends Component {
                                             <div className="col pl-5">
                                                 <Button size="sm" variant="info" onClick={this.onEdit(rowData)}><i className="fas fa-edit"></i>Edit</Button>
                                             </div>
-                                            {/* <div className="col pr-5">
+                                            <div className="col pr-5">
                                                 <Button onClick={this.onDelete(rowData)} size="sm" variant="danger"><i className="fas fa-trash"></i>Delete</Button>
-                                            </div> */}
+                                            </div>
                                         </Form>
                                     )
                                 }
@@ -252,8 +270,10 @@ export default class JobList extends Component {
             </Card>
             {this.state.showEditModel ? (
                 <JobEditModal show={true} onHide={closeEditModel} data={this.state.selectedJob} />
-            ) : this.state.showAlertModel ? (
-                <AlertModal show={true} onHide={closeAlertModel} />
+            ) : this.state.showAddModel ? (
+                <JobAddModal show={true} onHide={closeAddModel} />
+            ) : this.state.showDeleteModel ? (
+                <JobDeleteModal show={true} onHide={closeDeleteModel} data={this.state.selectedJob} />
             ) : (<></>)}
             </div>
         </div>
