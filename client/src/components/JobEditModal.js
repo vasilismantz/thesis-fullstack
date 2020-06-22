@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 
 
-export default class AddEventModel extends Component {
+export default class JobEditModal extends Component {
   constructor(props) {
     super(props);
 
