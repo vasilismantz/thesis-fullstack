@@ -223,8 +223,9 @@ export default class JobList extends Component {
                                     title: 'State', 
                                     field: 'endDate',
                                     render: job => (
-                                    new Date(job.startDate).getDate() > new Date().getDate() ? (<Badge variant="warning">Future Job</Badge>) : (
-                                        new Date(job.endDate).getDate() >= new Date().getDate() ? (<Badge variant="success">Current Job</Badge>) : (
+                                    //We have to set startDate hours to 0 and endDate hours to 24 so that the state of the job remains the same the whole day
+                                    new Date(job.startDate).setHours(0) > new Date() ? (<Badge variant="warning">Future Job</Badge>) : (
+                                        new Date(job.endDate).setHours(24) >= new Date() ? (<Badge variant="success">Current Job</Badge>) : (
                                             <Badge variant="danger">Old Job</Badge>
                                         )
                                     )
