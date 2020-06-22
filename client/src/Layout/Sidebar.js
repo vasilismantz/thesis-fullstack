@@ -109,70 +109,66 @@ export default class Sidebar extends Component {
                 </NavLink>
               </li>
               <li className="nav-item has-treeview">
-                <a href="#" className="nav-link">
-                  <i className="nav-icon fas fa-edit" />
+                <NavLink to="/fake-url" className="nav-link" activeClassName="nav-link">
+                  <i className="nav-icon fas fa-euro-sign" />
                   <p>
-                    Forms
-                    <i className="fas fa-angle-left right" />
+                    Payroll Management
+                    <i className="right fas fa-angle-left" />
                   </p>
-                </a>
+                </NavLink>
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <a href="pages/forms/general.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>General Elements</p>
-                    </a>
+                    <NavLink to="/salary-details" className="nav-link">
+                      <i className="fas fa-euro-sign nav-icon" />
+                      <p>Manage Salary Details</p>
+                    </NavLink>
                   </li>
                   <li className="nav-item">
-                    <a href="pages/forms/advanced.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Advanced Elements</p>
-                    </a>
+                    <NavLink to="/employee-list" className="nav-link">
+                      <i className="fas fa-users nav-icon" />
+                      <p>Employee Salary List</p>
+                    </NavLink>
                   </li>
                   <li className="nav-item">
-                    <a href="pages/forms/editors.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Editors</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="pages/forms/validation.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Validation</p>
-                    </a>
+                    <NavLink to="/employee-list" className="nav-link">
+                      <i className="fas fa-money-check nav-icon" />
+                      <p>Make Payment</p>
+                    </NavLink>
                   </li>
                 </ul>
               </li>
               <li className="nav-item has-treeview">
-                <a href="#" className="nav-link">
-                  <i className="nav-icon fas fa-table" />
+                <NavLink to="/fake-url" className="nav-link" activeClassName="nav-link">
+                  <i className="nav-icon fas fa-money-bill" />
                   <p>
-                    Tables
-                    <i className="fas fa-angle-left right" />
+                    Expense Management
+                    <i className="right fas fa-angle-left" />
                   </p>
-                </a>
+                </NavLink>
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <a href="pages/tables/simple.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Simple Tables</p>
-                    </a>
+                    <NavLink to="/employee-add" className="nav-link">
+                      <i className="fas fa-shopping-cart nav-icon" />
+                      <p>Make Expense</p>
+                    </NavLink>
                   </li>
                   <li className="nav-item">
-                    <a href="pages/tables/data.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>DataTables</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="pages/tables/jsgrid.html" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>jsGrid</p>
-                    </a>
+                    <NavLink to="/employee-list" className="nav-link">
+                      <i className="fas fa-file-invoice nav-icon" />
+                      <p>Expense Report</p>
+                    </NavLink>
                   </li>
                 </ul>
               </li>
-              <li className="nav-header">EXAMPLES</li>
+              <li className="nav-item">
+                <NavLink exact to="/departments" className="nav-link">
+                  <i className="nav-icon fa fa-bell" />
+                  <p>
+                    Announcements
+                  </p>
+                </NavLink>
+              </li>
+              {/* <li className="nav-header">EXAMPLES</li>
               <li className="nav-item">
                 <a href="pages/calendar.html" className="nav-link">
                   <i className="nav-icon far fa-calendar-alt" />
@@ -385,7 +381,7 @@ export default class Sidebar extends Component {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </nav>
           {/* /.sidebar-menu */}
