@@ -11,6 +11,7 @@ import EmployeeView from './components/EmployeeView'
 import EmployeeEdit from "./components/EmployeeEdit";
 import DepartmentList from "./components/DepartmentList"
 import ApplicationList from "./components/ApplicatonList"
+import SalaryDetails from './components/SalaryDetails'
 import Register from "./components/Register";
 import withAuth from "./withAuth";
 import Login from "./components/Login";
@@ -60,6 +61,7 @@ const DefaultContainer = () => (
         <Route exact path="/departments" component={withAuth(DepartmentList)} />
         <Route exact path="/job-list" component={withAuth(JobList)} />
         <Route exact path="/application-list" component={withAuth(ApplicationList)} />
+        <Route exact path="/salary-details" component={withAuth(SalaryDetails)} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
       </Switch>
