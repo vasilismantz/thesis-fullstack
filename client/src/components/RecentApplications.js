@@ -44,7 +44,7 @@ export default class RecentApplications extends React.Component {
                       <img src={process.env.PUBLIC_URL + '/user-40.png'}></img>
                     </div>
                     <span>{app.user.fullName} </span>
-                    <small>({app.reason})</small>
+                    <small>({app.type})</small>
                     <div className="float-right mt-2 mr-3">
                       <small style={{
                         color: (app.status === 'Approved' ? 'green' :
