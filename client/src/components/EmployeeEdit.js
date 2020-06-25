@@ -262,7 +262,7 @@ export default class EmployeeEdit extends Component {
   }
 
   render() {
-    if(this.state.user.id === null || this.state.userPersonalInfo.id === null || this.state.userFinancialInfo.id === null || this.state.department.id === null || this.state.departments.length === 0) {
+    if(this.state.user.id === null || this.state.userPersonalInfo.id === null || this.state.userFinancialInfo.id === null) {
       return <p>Loading...</p>
     }
     return (
@@ -343,8 +343,8 @@ export default class EmployeeEdit extends Component {
                             required
                           >
                             <option value="">Choose...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
                           </Form.Control>
                         </Form.Group>
 
@@ -360,8 +360,8 @@ export default class EmployeeEdit extends Component {
                             required
                           >
                             <option value="">Choose...</option>
-                            <option value="married">Married</option>
-                            <option value="single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Single">Single</option>
                           </Form.Control>
                         </Form.Group>
 
@@ -565,12 +565,6 @@ export default class EmployeeEdit extends Component {
                             {this.pushDepartments()}
                           </Form.Control>
                         </Form.Group>
-                        <Form.Group controlId="formEmployeeId">
-                          <Form.Label className="text-muted">
-                            Current Job
-                          </Form.Label>
-                          <div>{this.state.job.jobTitle} <NavLink to="/">(Change Job)</NavLink></div>
-                        </Form.Group>
                         <Form.Group controlId="formRole">
                           <Form.Label className="text-muted required">
                             Role
@@ -588,77 +582,28 @@ export default class EmployeeEdit extends Component {
                             <option value="ROLE_ADMIN">Admin</option>
                           </Form.Control>
                         </Form.Group>
+                        <Form.Group controlId="formActive">
+                          <Form.Label className="text-muted required">
+                            Status
+                          </Form.Label>
+                          <Form.Control
+                            as="select"
+                            value={this.state.user.active}
+                            onChange={this.handleChangeUser}
+                            name="active"
+                            required
+                          >
+                            <option value="">Choose...</option>
+                            <option value={false}>Inactive</option>
+                            <option value={true}>Active</option>
+                          </Form.Control>
+                        </Form.Group>
                       </Card.Text>
                     </Card.Body>
                   </Card>
                   <Button variant="primary" type="submit" block>
                     Submit
                   </Button>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-sm-6">
-                  <Card className="secondary-card">
-                    <Card.Header>Job <span classname="text-muted">(Warning! Only for editing current job)</span></Card.Header>
-                    <Card.Body>
-                      <Card.Text>
-                        <Form.Group controlId="formJobTitle">
-                          <Form.Label className="text-muted">Job Title</Form.Label>
-                          <Form.Control
-                            type="text"
-                            value={this.state.job.jobTitle}
-                            onChange={this.handleChangeJob}
-                            name="jobTitle"
-                            placeholder="Enter Job Title"
-                          />
-                        </Form.Group>
-                        <Form.Group controlId="formJobStart">
-                          <Form.Label className="text-muted">
-                            Start Date
-                          </Form.Label>
-                          <Form.Row>
-                            <DatePicker
-                              selected={this.state.job.startDate}
-                              onChange={startDate => this.setState(prevState => ({
-                                job: {
-                                  ...prevState.job,
-                                  startDate: startDate
-                                }
-                              }))}
-                              dropdownMode="select"
-                              name="startDate"
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control ml-1"
-                              placeholderText="Select Start Date"
-                              autoComplete="off"
-                            />
-                          </Form.Row>
-                        </Form.Group>
-                        <Form.Group controlId="formJobEnd">
-                          <Form.Label className="text-muted">
-                            End Date
-                          </Form.Label>
-                          <Form.Row>
-                            <DatePicker
-                              selected={this.state.job.endDate}
-                              onChange={endDate => this.setState(prevState => ({
-                                job: {
-                                  ...prevState.job,
-                                  endDate: endDate
-                                }
-                              }))}
-                              dropdownMode="select"
-                              name="endDate"
-                              dateFormat="yyyy-MM-dd"
-                              className="form-control ml-1"
-                              placeholderText="Select End Date"
-                              autoComplete="off"
-                            />
-                          </Form.Row>
-                        </Form.Group>
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
                 </div>
               </div>
             </Card.Body>
