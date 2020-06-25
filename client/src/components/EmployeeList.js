@@ -104,7 +104,7 @@ export default class EmployeeList extends Component {
                       field: 'jobs',
                       render: rowData => (
                         rowData.jobs.map((job, index) => {
-                          if(new Date(job.startDate) <= Date.now() && new Date(job.endDate) >= Date.now()) {
+                          if(new Date(job.startDate).setHours(0) <= Date.now() && new Date(job.endDate).setHours(24) >= Date.now()) {
                             return job.jobTitle
                           }
                         })
