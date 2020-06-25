@@ -34,8 +34,6 @@ db.daysWorking = require("./daysWorking.model")(sequelize, Sequelize);
 db.daysHoliday = require("./daysHoliday.model")(sequelize, Sequelize);
 db.payment = require("./payment.model")(sequelize, Sequelize);
 db.expense = require("./expense.model")(sequelize, Sequelize);
-db.images = require("./image.model")(sequelize, Sequelize)
-
 
 // Organization Associations
 db.organization.hasMany(db.department, {foreignKey: {allowNull: true}})
@@ -45,26 +43,39 @@ db.organization.hasMany(db.daysHoliday, {foreignKey: {allowNull: true}})
 // User Associations
 db.user.hasOne(db.userPersonalInfo, {foreignKey: {allowNull: false}})
 db.user.hasOne(db.userFinancialInfo, {foreignKey: {allowNull: false}})
-db.user.hasMany(db.userPersonalEvent, {foreignKey: {allowNull: false}})
+db.user.hasMany(db.userPersonalEvent, {foreignKey: {allowNull: false}, onDelete: 'CASCADE', hooks: true})
 db.user.hasMany(db.userMessage, {foreignKey: {name:'receiver', allowNull: false}})
-db.user.hasMany(db.application, {foreignKey: {allowNull: false}})
-db.user.hasMany(db.deptAnnouncement, {foreignKey: {name: 'createdByUserId', allowNull: false}})
-db.user.hasMany(db.job, {foreignKey: {allowNull: false}})
+db.user.hasMany(db.application, {foreignKey: {allowNull: false}, onDelete: 'CASCADE', hooks: true})
+db.user.hasMany(db.deptAnnouncement, {foreignKey: {name: 'createdByUserId', allowNull: false}, onDelete: 'CASCADE', hooks: true})
+db.user.hasMany(db.job, {foreignKey: {allowNull: false}, onDelete: 'CASCADE', hooks: true})
 db.user.belongsTo(db.department, {foreginKey: {allowNull: true}})
 
+// User Financial Informations Assocations
+db.userFinancialInfo.belongsTo(db.user, {foreignKey: {allowNull: false}})
+
 // Department Associations
-db.department.hasMany(db.user)
-db.department.hasMany(db.deptAnnouncement, {foreignKey: {allowNull: false}})
+db.department.hasMany(db.user, {onDelete: 'CASCADE', hooks: true})
+db.department.hasMany(db.deptAnnouncement, {foreignKey: {allowNull: true}, onDelete: 'CASCADE', hooks: true})
 db.department.hasMany(db.expense, {foreignKey: {allowNull: false}})
+
+// Expense Association
+db.expense.belongsTo(db.department, {foreignKey: {allowNull: false}})
 
 // Message Associations
 db.userMessage.belongsTo(db.user, {foreignKey: {name:'sender', allowNull: false}})
 
 // Job Associations
-db.job.hasMany(db.payment, {foreginKey: {allowNull: true}})
+db.job.hasMany(db.payment, {foreginKey: {allowNull: true}, onDelete: 'CASCADE', hooks: true})
 db.job.belongsTo(db.user, {foreignKey: {allowNull: false}})
 
 // Application Associations
 db.application.belongsTo(db.user)
+
+// Payment Associations
+db.payment.belongsTo(db.job)
+
+// Announcement Associations
+db.deptAnnouncement.belongsTo(db.department, {foreignKey: {allowNull: true}})
+db.deptAnnouncement.belongsTo(db.user, {foreignKey: {name: 'createdByUserId', allowNull: false}})
 
 module.exports = db;
