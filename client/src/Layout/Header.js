@@ -1,9 +1,38 @@
 import React, { Component } from "react";
+import {Redirect} from "react-router-dom"
+import NewPasswordModal from '../components/NewPasswordModal'
 
 export default class Header extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      completed: false,
+      showModal: false
+    }
+  }
+
+  onLogout = (event) => {
+    event.preventDefault()
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('token')
+    this.setState({completed: true})
+  }
+
+  newPassword = (event) => {
+    event.preventDefault()
+
+    this.setState({showModal: true})
+  }
+
   render() {
+    let closeModal = () => this.setState({showModal: false})
     return (
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+        {this.state.completed ? <Redirect to="/" /> : null}
+        {this.state.showModal ? <NewPasswordModal show={true} onHide={closeModal}/> : null}
         {/* Left navbar links */}
         <ul className="navbar-nav">
           <li className="nav-item">
@@ -16,7 +45,7 @@ export default class Header extends Component {
               <i className="fas fa-bars" />
             </a>
           </li>
-          <li className="nav-item d-none d-sm-inline-block">
+          {/* <li className="nav-item d-none d-sm-inline-block">
             <a href="index3.html" className="nav-link">
               Home
             </a>
@@ -25,10 +54,10 @@ export default class Header extends Component {
             <a href="#" className="nav-link">
               Contact
             </a>
-          </li>
+          </li> */}
         </ul>
         {/* SEARCH FORM */}
-        <form className="form-inline ml-3">
+        {/* <form className="form-inline ml-3">
           <div className="input-group input-group-sm">
             <input
               className="form-control form-control-navbar"
@@ -42,18 +71,18 @@ export default class Header extends Component {
               </button>
             </div>
           </div>
-        </form>
+        </form> */}
         {/* Right navbar links */}
         <ul className="navbar-nav ml-auto">
           {/* Messages Dropdown Menu */}
-          <li className="nav-item dropdown">
+          {/* <li className="nav-item dropdown">
             <a className="nav-link" data-toggle="dropdown" href="#">
               <i className="far fa-comments" />
               <span className="badge badge-danger navbar-badge">3</span>
             </a>
             <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
               <a href="#" className="dropdown-item">
-                {/* Message Start */}
+                //Message Start
                 <div className="media">
                   <img
                     src={process.env.PUBLIC_URL + '/dist/img/user1-128x128.jpg'}
@@ -73,11 +102,11 @@ export default class Header extends Component {
                     </p>
                   </div>
                 </div>
-                {/* Message End */}
+                // Message End
               </a>
               <div className="dropdown-divider" />
               <a href="#" className="dropdown-item">
-                {/* Message Start */}
+                // Message Start
                 <div className="media">
                   <img
                     src={process.env.PUBLIC_URL + '/dist/img/user8-128x128.jpg'}
@@ -97,11 +126,11 @@ export default class Header extends Component {
                     </p>
                   </div>
                 </div>
-                {/* Message End */}
+                // Message End
               </a>
               <div className="dropdown-divider" />
               <a href="#" className="dropdown-item">
-                {/* Message Start */}
+                // Message Start
                 <div className="media">
                   <img
                     src={process.env.PUBLIC_URL + '/dist/img/user3-128x128.jpg'}
@@ -121,35 +150,36 @@ export default class Header extends Component {
                     </p>
                   </div>
                 </div>
-                {/* Message End */}
+                // Message End
               </a>
               <div className="dropdown-divider" />
               <a href="#" className="dropdown-item dropdown-footer">
                 See All Messages
               </a>
             </div>
-          </li>
+          </li> */}
           {/* Notifications Dropdown Menu */}
           <li className="nav-item dropdown">
             <a className="nav-link" data-toggle="dropdown" href="#">
-              <i className="far fa-bell" />
-              <span className="badge badge-warning navbar-badge">15</span>
+              <i className="fas fa-user" />
+              <span className="pl-1">{JSON.parse(localStorage.getItem('user')).fullname}</span>
+              {/* <span className="badge badge-warning navbar-badge">15</span> */}
             </a>
             <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-              <span className="dropdown-item dropdown-header">
-                15 Notifications
+              <span className="dropdown-header">
+                Options
               </span>
               <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item">
-                <i className="fas fa-envelope mr-2" /> 4 new messages
-                <span className="float-right text-muted text-sm">3 mins</span>
+              <a  onClick={this.newPassword} href="#" className="dropdown-item">
+                <i className="fas fa-key mr-2" /> Change Password
+                {/* <span className="float-right text-muted text-sm">3 mins</span> */}
               </a>
               <div className="dropdown-divider" />
-              <a href="#" className="dropdown-item">
-                <i className="fas fa-users mr-2" /> 8 friend requests
-                <span className="float-right text-muted text-sm">12 hours</span>
+              <a onClick={this.onLogout} href="#" className="dropdown-item">
+                <i className="fas fa-sign-out-alt mr-2" /> Log out
+                {/* <span className="float-right text-muted text-sm">12 hours</span> */}
               </a>
-              <div className="dropdown-divider" />
+              {/* <div className="dropdown-divider" />
               <a href="#" className="dropdown-item">
                 <i className="fas fa-file mr-2" /> 3 new reports
                 <span className="float-right text-muted text-sm">2 days</span>
@@ -157,10 +187,10 @@ export default class Header extends Component {
               <div className="dropdown-divider" />
               <a href="#" className="dropdown-item dropdown-footer">
                 See All Notifications
-              </a>
+              </a> */}
             </div>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <a
               className="nav-link"
               data-widget="control-sidebar"
@@ -170,7 +200,7 @@ export default class Header extends Component {
             >
               <i className="fas fa-th-large" />
             </a>
-          </li>
+          </li> */}
         </ul>
       </nav>
     );
