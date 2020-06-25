@@ -14,8 +14,14 @@ router.post('/', withAuth.verifyToken, application.create);
 //Retrieve all Application by User Id
 router.get('/user/:id', withAuth.verifyToken, application.findAllByUserId);
 
+//Retrieve all Application by User Id
+router.get('/department/:id', withAuth.verifyToken, withAuth.withRoleManager, application.findAllByDeptId);
+
 //Retrieve Recent Applications (2 weeks old)
 router.get('/recent', withAuth.verifyToken, application.findAllRecent)
+
+//Retrieve Recent Applications (2 weeks old) And Dept
+router.get('/recent/department/:id', withAuth.verifyToken, application.findAllRecentAndDept)
 
 //Retrieve a single Application with an id
 router.get('/:id', withAuth.verifyToken, application.findOne);
