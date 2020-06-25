@@ -12,8 +12,11 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
         paymentMonth: {
-            type: Sequelize.ENUM,
-            values: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            type: Sequelize.DATE,
+            allowNull: false
+        },
+        paymentDate: {
+            type: Sequelize.DATE,
             allowNull: false
         },
         paymentFine: {
