@@ -8,41 +8,41 @@ module.exports = (sequelize, Sequelize) => {
       },
       dateOfBirth: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: true
       },
       gender: {
         type: Sequelize.ENUM,
         values: ['Male', 'Female'],
-        allowNull: false
+        allowNull: true
       },
       maritalStatus: {
         type: Sequelize.ENUM,
         values: ['Married', 'Single', 'Widowed'],
-        allowNull: false
+        allowNull: true
       },
       fatherName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       idNumber: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       address: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       city: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       country: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       mobile: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       phone: {
         type: Sequelize.STRING,
@@ -50,7 +50,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       emailAddress: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       }
     }, {
         timestamps: false,
