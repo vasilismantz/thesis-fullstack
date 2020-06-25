@@ -1,5 +1,6 @@
 const db = require("../models");
 const Expense = db.expense;
+const Department = db.department
 const Op = db.Sequelize.Op;
 const sequelize = db.sequelize
 
@@ -37,7 +38,11 @@ exports.create = (req, res) => {
 
 // Retrieve all Expenses from the database.
 exports.findAll = (req, res) => {
-  Expense.findAll()
+  Expense.findAll({
+    include: [{
+      model: Department
+    }]
+  })
     .then(data => {
       res.send(data);
     })
@@ -66,12 +71,38 @@ exports.findAllByYear = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving departments."
+          err.message || "Some error occurred while retrieving expenses."
       });
     });
 };
 
+exports.findAllByYearAndDept = (req, res) => {
+  const year = req.params.id;
+  const deptId = req.params.id2;
+  Expense.findAll({
+    where: {
+      [Op.and]: [
+        sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), year),
+        {departmentId: deptId}
+      ]
+    },
+    attributes: [
+      [sequelize.fn('monthname', sequelize.col('date')), 'month'], 
+      [sequelize.fn('sum', sequelize.col('amount')), 'expenses']
+    ],
+    group: [sequelize.fn('month', sequelize.col('date')), 'month']
 
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving expenses."
+      });
+    });
+};
 
 //Retrieve all Expenses By Department Id
 exports.findAllByDeptId = (req, res) => {
