@@ -13,7 +13,7 @@ require('dotenv').config()
 var indexRouter = require('./routes/index');
 var api = require('./routes/api');
 var login = require('./routes/login/login.routes');
-var upload = require('./routes/upload.routes')
+var register = require('./routes/register/register.routes')
 
 var app = express();
 
@@ -36,7 +36,7 @@ var corsOptions = {
 
 app.use(cors(corsOptions))
 
-// db.sequelize.sync()
+db.sequelize.sync({alter: true})
 
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and re-sync db.");
@@ -45,7 +45,7 @@ app.use(cors(corsOptions))
 app.use('/', indexRouter);
 app.use('/api', api);
 app.use('/login', login)
-app.use('/upload', upload)
+app.use('/register', register)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
