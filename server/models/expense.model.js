@@ -21,10 +21,6 @@ module.exports = (sequelize, Sequelize) => {
         amount: {
             type: Sequelize.INTEGER,
             allowNull: false
-        },
-        receipt: {
-            type: Sequelize.STRING,
-            allowNull: true
         }
     }, {
         timestamps: false,
