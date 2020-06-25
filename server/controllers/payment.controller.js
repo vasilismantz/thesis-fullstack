@@ -1,6 +1,11 @@
 const db = require("../models");
+const { user } = require("../models");
 const Payment = db.payment;
+const User = db.user
+const Job = db.job
+const UserFinancialInfo = db.userFinancialInfo
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize
 
 // Create and Save a new Payment
 exports.create = (req, res) => {
@@ -16,7 +21,8 @@ exports.create = (req, res) => {
   const payment = {
     paymentType: req.body.paymentType,
     paymentMonth: req.body.paymentMonth,
-    paymentFine: req.body.PaymentFine,
+    paymentDate: req.body.paymentDate,
+    paymentFine: req.body.paymentFine,
     paymentAmount: req.body.paymentAmount,
     comments: req.body.comments,
     jobId: req.body.jobId
@@ -45,6 +51,28 @@ exports.findAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving departments."
+      });
+    });
+};
+
+exports.findAllByYear = (req, res) => {
+  const year = req.params.id;
+  Payment.findAll({
+    where: sequelize.where(sequelize.fn('YEAR', sequelize.col('payment_month')), year),
+    attributes: [
+      [sequelize.fn('monthname', sequelize.col('payment_month')), 'month'], 
+      [sequelize.fn('sum', sequelize.col('payment_amount')), 'expenses']
+    ],
+    group: [sequelize.fn('month', sequelize.col('payment_month')), 'month']
+
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving payments."
       });
     });
 };
@@ -79,6 +107,31 @@ exports.findOne = (req, res) => {
       });
     });
 };
+
+exports.findAllByUser = (req, res) => {
+  const id = req.params.id
+
+  Payment.findAll({
+    include: [{
+      model: Job,
+      where: {userId: id},
+      include: [{
+        model: User,
+        include: [{
+          model: UserFinancialInfo
+        }]
+      }]
+    }]
+  })
+  .then(data => {
+    res.send(data)
+  })
+  .catch(err => {
+      res.status(500).send({
+        message: err
+      });
+    });
+}
 
 // Update an Payment by the id in the request
 exports.update = (req, res) => {
