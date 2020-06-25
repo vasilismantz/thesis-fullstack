@@ -69,7 +69,7 @@ exports.findAll = (req, res) => {
 };
 
 //Retrieve all User Financial Informations By User Id
-exports.findAllByUserId = (req, res) => {
+exports.findByUserId = (req, res) => {
     const userId = req.params.id
 
     UserFinancialInformation.findAll({where: {userId: userId}})
