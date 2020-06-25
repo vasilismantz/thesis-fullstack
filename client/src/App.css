@@ -259,3 +259,87 @@ div.myDiv input {
 #emp-view-bank .form-group:nth-child(4) span {
   padding-left: 9.9em;
 }
+
+
+
+
+
+
+
+
+#sal-view-details .form-label {
+  padding-left: 7.6rem;
+}
+
+#sal-view-details .form-group:nth-child(1) span {
+  padding-left: 6em;
+}
+
+#sal-view-details .form-group:nth-child(2) span {
+  padding-left: 8.9em;
+}
+
+
+#sal-view-allowances .form-label {
+  padding-left: 7.6rem;
+}
+
+#sal-view-allowances .form-group:nth-child(1) span {
+  padding-left: 6em;
+}
+
+#sal-view-allowances .form-group:nth-child(2) span {
+  padding-left: 7.7em;
+}
+
+#sal-view-allowances .form-group:nth-child(3) span {
+  padding-left: 8.1em;
+}
+
+#sal-view-allowances .form-group:nth-child(4) span {
+  padding-left: 9.45em;
+}
+
+#sal-view-allowances .form-group:nth-child(5) span {
+  padding-left: 6.6em;
+}
+
+#sal-view-allowances .form-group:nth-child(6) span {
+  padding-left: 8.75em;
+}
+
+#sal-view-allowances .form-group:nth-child(7) span {
+  padding-left: 9.08em;
+}
+
+#sal-view-deductions .form-label {
+  padding-left: 7.6rem;
+}
+
+#sal-view-deductions .form-group:nth-child(1) span {
+  padding-left: 7em;
+}
+
+#sal-view-deductions .form-group:nth-child(2) span {
+  padding-left: 5.9em;
+}
+
+#sal-view-deductions .form-group:nth-child(3) span {
+  padding-left: 6.21em;
+}
+
+#sal-view-total .form-label {
+  padding-left: 7.6rem;
+}
+
+#sal-view-total .form-group:nth-child(1) span {
+  padding-left: 10.5em;
+}
+
+#sal-view-total .form-group:nth-child(2) span {
+  padding-left: 8.86em;
+}
+
+#sal-view-total .form-group:nth-child(3) span {
+  padding-left: 11.47em;
+}
