@@ -14,6 +14,9 @@ router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.f
 // Retrieve Expenses By Year
 router.get('/year/:id', withAuth.verifyToken, expense.findAllByYear)
 
+// Retrieve Expenses By Year and Department
+router.get('/year/:id/department/:id2', withAuth.verifyToken, withAuth.withRoleManager, expense.findAllByYearAndDept)
+
 //Retrieve all Expenses by Department Id
 router.get('/department/:id', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.findAllByDeptId);
 
