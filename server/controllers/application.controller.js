@@ -1,8 +1,10 @@
 const db = require("../models");
 const Application = db.application;
 const User = db.user;
+const Department = db.department
 const Op = db.Sequelize.Op;
-const moment = require('moment')
+const moment = require('moment');
+const { department } = require("../models");
 
 // Create and Save a new Application
 exports.create = (req, res) => {
@@ -58,9 +60,14 @@ exports.findAll = (req, res) => {
 exports.findAllRecent = (req, res) => {
   Application.findAll({
     where: {
-      endDate: {
-        [Op.gte]: moment().subtract(14, 'days').toDate()
-      }
+      [Op.and]: [
+        {startDate: {
+          [Op.gte]: moment().subtract(14, 'days').toDate()
+        }},
+        {startDate : {
+          [Op.lte]: moment().add(7, 'days').toDate()
+        }}
+      ]
     },
     include: [{
       model: User
@@ -76,6 +83,58 @@ exports.findAllRecent = (req, res) => {
           err.message || "Some error occurred while retrieving Applications.",
       });
     });
+};
+
+exports.findAllRecentAndDept = (req, res) => {
+  const id = req.params.id
+
+  Application.findAll({
+    where: {
+      [Op.and]: [
+        {startDate: {
+          [Op.gte]: moment().subtract(14, 'days').toDate()
+        }},
+        {startDate : {
+          [Op.lte]: moment().add(7, 'days').toDate()
+        }}
+      ]
+    },
+    include: [{
+      model: User,
+      where: {departmentId: id}
+    }]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Applications.",
+      });
+    });
+};
+
+//Retrieve all Applications By User Id
+exports.findAllByDeptId = (req, res) => {
+  const deptId = req.params.id;
+
+  Application.findAll({
+    include: [{
+      model: User,
+      where: {departmentId: deptId}
+    }]
+  })
+  .then(data => {
+    res.send(data)
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving Applications.",
+    });
+  })
 };
 
 //Retrieve all Applications By User Id
