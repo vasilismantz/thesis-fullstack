@@ -20,6 +20,7 @@ export default class SalaryDetails extends Component {
             departments: [],
             selectedDepartment: null,
             selectedUser: null,
+            financialId: null,
             users: [],
             salaryBasic: 0,
             allowanceHouseRent: 0,
@@ -29,7 +30,10 @@ export default class SalaryDetails extends Component {
             allowancePhoneBill: 0,
             allowanceOther: 0,
             deductionTax: 0,
-            deductionOther: 0
+            deductionOther: 0,
+            hasError: false,
+            errMsg: "",
+            completed: false
         }
     }
 
@@ -40,7 +44,34 @@ export default class SalaryDetails extends Component {
             headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
         })
         .then(res => {
-            this.setState({departments: res.data})
+            this.setState({departments: res.data}, () => {
+                if(this.props.location.state) {
+                    this.setState({selectedDepartment: this.props.location.state.selectedUser.departmentId}, () => {
+                        this.fetchData()
+                    })
+                    this.setState({selectedUser: this.props.location.state.selectedUser.id}, () => {
+                        this.pushChanges()
+                    })
+                }
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    pushChanges = () => {
+        axios({
+            method: 'get',
+            url: 'api/financialInformations/user/' + this.state.selectedUser,
+            headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+        })
+        .then(res => {
+            this.setState(prevState => ({
+                ...prevState,
+                financialId: res.data[0].id,
+                ...res.data[0]
+            }))
         })
         .catch(err => {
             console.log(err)
@@ -125,21 +156,26 @@ export default class SalaryDetails extends Component {
     }
 
     handleUserChange = (event) => {
-        this.setState({selectedUser: event.target.value}, () => {
-            axios({
-                method: 'get',
-                url: 'api/financialInformations/user/' + this.state.selectedUser,
-                headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
-            })
-            .then(res => {
-                this.setState(prevState => ({
-                    ...prevState,
-                    ...res.data
-                }))
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        this.state.users.map(user => {
+            if(user.id == event.target.value) {
+                this.setState({selectedUser: event.target.value}, () => {
+                    axios({
+                        method: 'get',
+                        url: 'api/financialInformations/user/' + this.state.selectedUser,
+                        headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+                    })
+                    .then(res => {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            financialId: res.data[0].id,
+                            ...res.data[0]
+                        }))
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                })
+            }
         })
     }
 
@@ -166,8 +202,40 @@ export default class SalaryDetails extends Component {
             salaryGross: this.salaryGross,
             salaryNet: this.salaryNet,
             allowanceHouseRent: this.state.allowanceHouseRent,
-            allowanceMedical: this.state.allowanceMedical
+            allowanceMedical: this.state.allowanceMedical,
+            allowanceSpecial: this.state.allowanceSpecial,
+            allowanceFuel: this.state.allowanceFuel,
+            allowancePhoneBill: this.state.allowancePhoneBill,
+            allowanceOther: this.state.allowanceOther,
+            allowanceTotal: this.state.allowanceHouseRent + this.state.allowanceMedical + this.state.allowanceSpecial +
+                            this.state.allowanceFuel + this.state.allowancePhoneBill + this.state.allowanceOther,
+            deductionTax: this.state.deductionTax,
+            deductionOther: this.state.deductionOther,
+            deductionTotal: this.state.deductionTax + this.state.deductionOther,
+            salaryGross: this.state.salaryBasic + this.state.allowanceHouseRent + 
+                        this.state.allowanceMedical + this.state.allowanceSpecial + 
+                        this.state.allowancePhoneBill + this.state.allowanceFuel + 
+                        this.state.allowanceOther,
+            salaryNet: this.state.salaryBasic + this.state.allowanceHouseRent + 
+                        this.state.allowanceMedical + this.state.allowanceSpecial + 
+                        this.state.allowancePhoneBill + this.state.allowanceFuel + 
+                        this.state.allowanceOther - this.state.deductionTax - this.state.deductionOther
         }
+
+        axios({
+            method: 'put',
+            url: 'api/financialInformations/' + this.state.financialId,
+            data: data,
+            headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+        })
+        .then(res => {
+            this.setState({completed: true})
+            window.scrollTo(0, 0)
+        })
+        .catch(err => {
+            this.setState({hasError: true, errMsg: err.response.data.message})
+            window.scrollTo(0, 0)
+        })
     }
 
     onEdit (job) {
@@ -192,12 +260,24 @@ export default class SalaryDetails extends Component {
     return (
       <div className="container-fluid pt-2">
         <div className="row">
+
+          {this.state.hasError ? (
+            <Alert variant="danger" className="m-3" block>
+              {this.state.errMsg}
+            </Alert>
+          ): 
+          this.state.completed ? (
+            <Alert variant="success" className="m-3" block>
+              Financial Infromation have been updated.
+            </Alert>
+          ) : (<></>)}
+
             <div className="col-sm-12">
                 <Card className="main-card">
                     <Card.Header><div className="required">Manage Salary Details</div></Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            <Form>
+                            <Form onSubmit={this.onSubmit}>
                                 <Form.Group>
                                     <Form.Label>Select Department: </Form.Label>
                                     <Form.Control
@@ -394,7 +474,7 @@ export default class SalaryDetails extends Component {
                             </div>
                         </div>
                         <div className="row mb-2">
-                            <Button block>Submit</Button>
+                            <Button type="submit" block>Submit</Button>
                         </div>
                     </div>
                 </div>
