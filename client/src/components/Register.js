@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
+import {NavLink} from 'react-router-dom'
 
 export default class Register extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ export default class Register extends Component {
       fullname: "",
       passwordShow: false,
       passwordCheckShow: false,
+      completed: false,
       hasError: false,
       errorMessage: "",
     };
@@ -48,7 +50,7 @@ export default class Register extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    if (this.password !== this.checkPassword) {
+    if (this.state.password !== this.state.checkPassword) {
       alert("Passwords don't match");
     } else {
       var newUser = {
@@ -59,14 +61,13 @@ export default class Register extends Component {
 
       axios({
         method: "post",
-        url: "/api/user",
+        url: "/register",
         data: newUser,
       })
         .then((res) => {
-          alert("You have been registered successfully");
+          this.setState({completed: true, hasError: false})
         })
         .catch((err) => {
-          console.log(err.response);
           this.setState({
             hasError: true,
             errorMessage: err.response.data.message 
@@ -88,6 +89,11 @@ export default class Register extends Component {
           <div className="card-body register-card-body">
             {this.state.hasError ? (
               <Alert variant="danger">{this.state.errorMessage}</Alert>
+            ) : null}
+            {this.state.completed ? (
+              <Alert variant="success">
+                You have been registered successfully. <NavLink to="/login">Go to Login.</NavLink>
+              </Alert>
             ) : null}
             <p className="login-box-msg">Register</p>
             <form onSubmit={this.onSubmit}>
