@@ -14,6 +14,8 @@ router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, user.find
 //Retreive user count
 router.get('/total', withAuth.verifyToken, withAuth.withRoleAdminOrManager, user.findTotal);
 
+router.get('/total/department/:id', withAuth.verifyToken, withAuth.withRoleManager, user.findTotalByDept)
+
 //Retrieve all Users by Department Id
 router.get('/department/:id', withAuth.verifyToken, user.findAllByDeptId);
 
@@ -22,6 +24,8 @@ router.get('/:id', withAuth.verifyToken, user.findOne);
 
 // Update a User with id
 router.put('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, user.update);
+
+router.put('/changePassword/:id', withAuth.verifyToken, user.changePassword)
 
 // Delete a User with id
 router.delete('/:id', withAuth.verifyToken, withAuth.withRoleAdmin, user.delete);
