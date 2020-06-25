@@ -1,5 +1,7 @@
 const db = require("../models");
 const DepartmentAnnouncement = db.deptAnnouncement;
+const User = db.user
+const Department = db.department
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Department Announcement Announcement
@@ -35,7 +37,13 @@ exports.create = (req, res) => {
 
 // Retrieve all Departments from the database.
 exports.findAll = (req, res) => {
-  DepartmentAnnouncement.findAll()
+  DepartmentAnnouncement.findAll({
+    include: [{
+      model: User
+    }, {
+      model: Department
+    }]
+  })
     .then(data => {
       res.send(data);
     })
