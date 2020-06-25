@@ -4,7 +4,10 @@ const UserPersonalInfo = db.userPersonalInfo;
 const UserFinancialInfo = db.userFinancialInfo;
 const Department = db.department;
 const Job = db.job
+const Payment = db.payment;
 const Op = db.Sequelize.Op;
+
+const bcrypt = require('bcrypt')
 
 // Create and Save a new User
 exports.create = (req, res) => {
@@ -16,10 +19,16 @@ exports.create = (req, res) => {
         return;
     }
 
+    let hash = null;
+    if(req.body.password) {
+        hash = bcrypt.hashSync(req.body.password.toString(), 10);
+    }
+
+    console.log(req.body)
     // Create a User
     const user = {
         username: req.body.username,
-        password: req.body.password,
+        password: hash,
         fullName: req.body.fullname,
         role: "ROLE_ADMIN",
         active: true,
@@ -27,7 +36,9 @@ exports.create = (req, res) => {
     };
 
     // Save User in the database
-    User.findOne({ where: { username: user.username } })
+    User.findOne({ 
+        where: { username: user.username } 
+    })
         .then(userExists => {
             if (!userExists) {
                 User.create(user)
@@ -86,11 +97,41 @@ exports.findTotal = (req, res) => {
         });
 };
 
+// Retrieve all Users from the database.
+exports.findTotalByDept = (req, res) => {
+    const id = req.params.id
+    
+    User.count({
+        where: {departmentId: id}
+    })
+        .then(data => {
+            res.send(data.toString());
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving the Users."
+            });
+        });
+};
+
+
 // Retrieve all Users by Department Id
 exports.findAllByDeptId = (req, res) => {
     const departmentId = req.params.id;
 
-    User.findAll({ where: { departmentId: departmentId } })
+    User.findAll({ 
+        where: { departmentId: departmentId },
+        include: [{
+            model: UserPersonalInfo
+        }, {
+            model: UserFinancialInfo
+        }, {
+            model: Department
+        }, {
+            model: Job
+        }] 
+    })
         .then(data => {
             res.send(data);
         })
@@ -114,7 +155,10 @@ exports.findOne = (req, res) => {
         }, {
             model: Department
         }, {
-            model: Job
+            model: Job,
+            include: [{
+                model: Payment
+            }]
         }],
         where: {
             id: id
@@ -133,6 +177,10 @@ exports.findOne = (req, res) => {
 // Update a User by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
+
+    if(req.body.password) {
+        req.body.password = bcrypt(req.body.password, 10);
+    }
 
     User.update(req.body, {
         where: { id: id }
@@ -153,6 +201,59 @@ exports.update = (req, res) => {
                 message: "Error updating User with id=" + id
             });
         });
+};
+
+exports.changePassword = (req, res) => {
+    const id = req.params.id;
+
+    if (!req.body.oldPassword || !req.body.newPassword) {
+        res.status(400).send({
+            message: "Please send oldPassword and newPassword!"
+        });
+        return;
+    }
+
+    User.findOne({
+        where: {id: id}
+    })
+    .then(user => {
+        if(user) {
+            if(bcrypt.compareSync(req.body.oldPassword, user.password)) {
+                let hash = bcrypt.hashSync(req.body.newPassword, 10)
+                console.log('hash', hash)
+                let data = {
+                    password: hash
+                }
+                User.update(data, {
+                    where: {id: id}
+                })
+                .then(num => {
+                    if (num == 1) {
+                        res.send({
+                            message: "User was updated successfully."
+                        });
+                    } else {
+                        res.send({
+                            message: `Cannot update User with id=${id}. Maybe Organization was not found or req.body is empty!`
+                        });
+                    }
+                })
+                .catch(err => {
+                    res.status(500).send({
+                        message: "Error updating User with id=" + id
+                    });
+                })
+            } else {
+                res.status(400).send({
+                    message: "Wrong Password"
+                });
+            }
+        } else {
+            res.status(400).send({
+                message: "No such user!"
+            });
+        }
+    })
 };
 
 // Delete a User with the specified id in the request
