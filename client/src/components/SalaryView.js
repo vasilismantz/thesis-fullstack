@@ -18,6 +18,7 @@ export default class SalaryView extends Component {
 
   componentDidMount() {
       if(this.props.location.state) {
+          console.log(this.props.location.state)
           axios({
               method: 'get',
               url: 'api/users/' + this.props.location.state.selectedUser.user.id,
@@ -87,7 +88,7 @@ export default class SalaryView extends Component {
                                                                     Employment Type: 
                                                                 </Form.Label>
                                                                 <span>
-                                                                    {this.state.user.user_financial_info.employmentType === 'fullTime' ? 'Full Time' : 'Part Time'}
+                                                                    {this.state.user.user_financial_info.employmentType}
                                                                 </span>
                                                             </Form.Group>
                                                             <Form.Group as={Row}>
@@ -179,7 +180,7 @@ export default class SalaryView extends Component {
                                                                     Tax Deduction: 
                                                                 </Form.Label>
                                                                 <span>
-                                                                    € {this.state.user.user_financial_info.deductionTax},
+                                                                    € {this.state.user.user_financial_info.deductionTax}
                                                                 </span>
                                                             </Form.Group>
                                                             <Form.Group as={Row}>
@@ -212,7 +213,7 @@ export default class SalaryView extends Component {
                                                                     Gross Salary: 
                                                                 </Form.Label>
                                                                 <span>
-                                                                    € {this.state.user.user_financial_info.salaryGross},
+                                                                    € {this.state.user.user_financial_info.salaryGross}
                                                                 </span>
                                                             </Form.Group>
                                                             <Form.Group as={Row}>
