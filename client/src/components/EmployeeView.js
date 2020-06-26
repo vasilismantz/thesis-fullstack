@@ -204,7 +204,7 @@ export default class EmployeeView extends Component {
                                                                 Bank Name: 
                                                             </Form.Label>
                                                             <span>
-                                                                {this.state.userFinancialInfo.bankName},
+                                                                {this.state.userFinancialInfo.bankName}
                                                             </span>
                                                         </Form.Group>
                                                         <Form.Group as={Row}>
