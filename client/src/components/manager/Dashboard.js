@@ -4,7 +4,6 @@ import "../../App.css";
 import Infobox from "../infobox";
 import Calendar from "../Calendar";
 import ExpenseChartsPage from "../manager/ExpenseChartsPage"
-import PaymentChartsPage from "../PaymentChartsPage"
 import RecentApplciations from "../manager/RecentApplications"
 import axios from 'axios'
 
@@ -46,21 +45,6 @@ export default class DashboardManager extends Component {
       if(array.length>0){
         let sum = array.reduce((a, b) => ({expenses: parseInt(a.expenses) + parseInt(b.expenses)}))
         this.setState({totalExpenses: sum.expenses})
-      } else {
-      }
-    })
-
-    //Fetch Payments Total
-    axios({
-      method: 'get',
-      url: 'api/payments/year/2020',
-      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
-    })
-    .then(res => {
-      let array = res.data
-      if(array.length>0){
-        let sum = array.reduce((a, b) => ({expenses: parseInt(a.expenses) + parseInt(b.expenses)}))
-        this.setState({totalPayments: sum.expenses})
       } else {
       }
     })
