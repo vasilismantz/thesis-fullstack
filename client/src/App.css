@@ -262,6 +262,68 @@ div.myDiv input {
 
 
 
+#emp-view-personal-dashboard .form-label {
+  padding-left: 2rem;
+}
+
+#emp-view-personal-dashboard .form-group:nth-child(1) span {
+  padding-left: 6.26em;
+}
+
+#emp-view-personal-dashboard .form-group:nth-child(2) span {
+  padding-left: 8.9em;
+}
+
+#emp-view-personal-dashboard .form-group:nth-child(3) span {
+  padding-left: 5.8em;
+}
+
+#emp-view-personal-dashboard .form-group:nth-child(4) span {
+  padding-left: 5.7em;
+}
+
+#emp-view-contact-dashboard .form-label {
+  padding-left: 2rem;
+}
+
+#emp-view-contact-dashboard .form-group:nth-child(1) span {
+  padding-left: 6.5em;
+}
+
+#emp-view-contact-dashboard .form-group:nth-child(2) span {
+  padding-left: 6.8em;
+}
+
+#emp-view-contact-dashboard .form-group:nth-child(3) span {
+  padding-left: 7.25em;
+}
+
+#emp-view-contact-dashboard .form-group:nth-child(4) span {
+  padding-left: 4em;
+}
+
+#emp-view-bank-dashboard .form-label {
+  padding-left: 2rem;
+}
+
+#emp-view-bank-dashboard .form-group:nth-child(1) span {
+  padding-left: 7em;
+}
+
+#emp-view-bank-dashboard .form-group:nth-child(2) span {
+  padding-left: 5.45em;
+}
+
+#emp-view-bank-dashboard .form-group:nth-child(3) span {
+  padding-left: 9em;
+}
+
+#emp-view-bank-dashboard .form-group:nth-child(4) span {
+  padding-left: 9.9em;
+}
+
+
+
 
 
 
