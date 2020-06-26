@@ -85,6 +85,35 @@ exports.findAllRecent = (req, res) => {
     });
 };
 
+// Retrieve all Applications from the database.
+exports.findAllRecent = (req, res) => {
+  Application.findAll({
+    where: {
+      [Op.and]: [
+        {startDate: {
+          [Op.gte]: moment().subtract(14, 'days').toDate()
+        }},
+        {startDate : {
+          [Op.lte]: moment().add(7, 'days').toDate()
+        }}
+      ]
+    },
+    include: [{
+      model: User
+    }]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Applications.",
+      });
+    });
+};
+
 exports.findAllRecentAndDept = (req, res) => {
   const id = req.params.id
 
@@ -102,6 +131,37 @@ exports.findAllRecentAndDept = (req, res) => {
     include: [{
       model: User,
       where: {departmentId: id}
+    }]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Applications.",
+      });
+    });
+};
+
+exports.findAllRecentAndUser = (req, res) => {
+  const id = req.params.id
+
+  Application.findAll({
+    where: {
+      [Op.and]: [
+        {startDate: {
+          [Op.gte]: moment().subtract(14, 'days').toDate()
+        }},
+        {startDate : {
+          [Op.lte]: moment().add(7, 'days').toDate()
+        }}
+      ]
+    },
+    include: [{
+      model: User,
+      where: {id: id}
     }]
   })
     .then(data => {
@@ -142,7 +202,12 @@ exports.findAllByUserId = (req, res) => {
   const userId = req.params.id;
 
   User.findByPk(userId).then((user) => {
-    Application.findAll({ where: { userId: userId } })
+    Application.findAll({ 
+      include: [{
+        model: User
+      }],
+      where: { userId: userId } 
+    })
       .then((data) => {
         res.send(data);
       })
