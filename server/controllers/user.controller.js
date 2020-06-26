@@ -30,7 +30,7 @@ exports.create = (req, res) => {
         username: req.body.username,
         password: hash,
         fullName: req.body.fullname,
-        role: "ROLE_ADMIN",
+        role: req.body.role,
         active: true,
         departmentId: req.body.departmentId
     };
