@@ -21,7 +21,10 @@ router.get('/department/:id', withAuth.verifyToken, withAuth.withRoleManager, ap
 router.get('/recent', withAuth.verifyToken, application.findAllRecent)
 
 //Retrieve Recent Applications (2 weeks old) And Dept
-router.get('/recent/department/:id', withAuth.verifyToken, application.findAllRecentAndDept)
+router.get('/recent/department/:id', withAuth.verifyToken, withAuth.withRoleManager, application.findAllRecentAndDept)
+
+//Retrieve Recent Applications (2 weeks old) And User
+router.get('/recent/user/:id', withAuth.verifyToken, application.findAllRecentAndUser)
 
 //Retrieve a single Application with an id
 router.get('/:id', withAuth.verifyToken, application.findOne);
