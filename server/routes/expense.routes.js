@@ -6,7 +6,7 @@ const withAuth = require("../withAuth")
 const expense = require("../controllers/expense.controller.js");
 
 // Create a new Expense
-router.post('/', withAuth.verifyToken, withAuth.withRoleAdmin, expense.create);
+router.post('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.create);
 
 //Retrieve all Expenses
 router.get('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, expense.findAll)
