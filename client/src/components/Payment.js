@@ -371,6 +371,7 @@ export default class Payment extends Component {
                                             value={this.state.paymentType}
                                             onChange={this.handleChange}
                                             name="paymentType"
+                                            required
                                         >
                                             <option value="">Choose one...</option>
                                             <option value="Cash">Cash</option>
