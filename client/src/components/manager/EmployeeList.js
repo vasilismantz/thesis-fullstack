@@ -15,6 +15,7 @@ export default class EmployeeList extends Component {
       users: [],
       selectedUser: null,
       viewRedirect: false,
+      viewSalaryRedirect: false,
       editRedirect: false,
       deleteModal: false
     }
@@ -43,6 +44,14 @@ export default class EmployeeList extends Component {
     } 
   }
 
+  onSalaryView = (user) => {
+    return (event) => {
+      event.preventDefault()
+
+      this.setState({selectedUser: {user: {id: user.id}}, viewSalaryRedirect: true})
+    } 
+  }
+
   render() {
 
 
@@ -59,6 +68,7 @@ export default class EmployeeList extends Component {
     return (
       <div className="container-fluid pt-4">
         {this.state.viewRedirect ? (<Redirect to={{pathname: '/employee-view', state: {selectedUser: this.state.selectedUser}}}></Redirect>) : (<></>)}
+        {this.state.viewSalaryRedirect ? (<Redirect to={{pathname: '/salary-view', state: {selectedUser: this.state.selectedUser}}}></Redirect>) : (<></>)}
         <div className="col-sm-12">
           <Card>
             <Card.Header style={{ backgroundColor: "#515e73", color: "white" }}>
@@ -101,6 +111,7 @@ export default class EmployeeList extends Component {
                       render: rowData => (
                         <Form>
                           <Button size="sm" variant="info" onClick={this.onView(rowData)}><i className="far fa-address-card"></i></Button>
+                          <Button className="ml-2" size="sm" variant="info" onClick={this.onSalaryView(rowData)}><i className="fas fa-euro-sign"></i></Button>
                         </Form>
                       )
                     }
