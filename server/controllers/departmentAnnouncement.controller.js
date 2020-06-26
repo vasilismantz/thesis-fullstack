@@ -59,7 +59,14 @@ exports.findAll = (req, res) => {
 exports.findAllByDeptId = (req, res) => {
     const departmentId = req.params.id
 
-    DepartmentAnnouncement.findAll({where: {departmentId: departmentId}})
+    DepartmentAnnouncement.findAll({
+      include: [{
+        model: User
+      }, {
+        model: Department
+      }],
+      where: {departmentId: departmentId}
+    })
       .then(data => {
         res.send(data);
       })
