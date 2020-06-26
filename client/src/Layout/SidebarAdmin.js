@@ -23,7 +23,7 @@ export default class SidebarAdmin extends Component {
       <aside className="main-sidebar sidebar-dark-primary elevation-4" >
         {/* Brand Logo */}
         <a href="/" className="brand-link">
-          <span className="brand-text font-weight-light ml-1">HRMS</span>
+          <span className="brand-text font-weight-light ml-1">HRMS Admin</span>
         </a>
         {/* Sidebar */}
         <div className="sidebar">
