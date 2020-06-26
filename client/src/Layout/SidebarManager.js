@@ -102,35 +102,6 @@ export default class SidebarManager extends Component {
               </li>
               <li className="nav-item has-treeview">
                 <NavLink to="/fake-url" className="nav-link" activeClassName="nav-link">
-                  <i className="nav-icon fas fa-euro-sign" />
-                  <p>
-                    Payroll Management
-                    <i className="right fas fa-angle-left" />
-                  </p>
-                </NavLink>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <NavLink to="/salary-details" className="nav-link">
-                      <i className="fas fa-euro-sign nav-icon" />
-                      <p>Manage Salary Details</p>
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink to="/salary-list" className="nav-link">
-                      <i className="fas fa-users nav-icon" />
-                      <p>Employee Salary List</p>
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink to="/payment" className="nav-link">
-                      <i className="fas fa-money-check nav-icon" />
-                      <p>Make Payment</p>
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item has-treeview">
-                <NavLink to="/fake-url" className="nav-link" activeClassName="nav-link">
                   <i className="nav-icon fas fa-money-bill" />
                   <p>
                     Expense Management
