@@ -90,9 +90,8 @@ export default class AddEventModel extends Component {
         <Modal.Body>
             {done ? <Redirect to="/" /> : <></>}
             {showAlert ? (
-                <Alert variant="alert alert-warning" className="m-1">
-                    <Alert.Heading>Wrong End Date</Alert.Heading>
-                    <p>End Date should be after Start Date</p>
+                <Alert variant="warning" className="m-1">
+                    End Date should be after Start Date
                 </Alert>) : (<></>)
             }
             <Form onSubmit={this.onSubmit}>
@@ -140,7 +139,7 @@ export default class AddEventModel extends Component {
                 </Form.Group>
 
                 <Form.Group controlId="formEndDate">
-                    <Form.Label>End Date</Form.Label>
+                    <Form.Label className="required">End Date</Form.Label>
                     <DatePicker
                         selected={this.state.endDate}
                         onChange={newEndDate => this.setState({ endDate: newEndDate })}

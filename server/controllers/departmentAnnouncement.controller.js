@@ -19,7 +19,8 @@ exports.create = (req, res) => {
     announcementTitle: req.body.announcementTitle,
     announcementDescription: req.body.announcementDescription,
     createdByUserId: req.body.createdByUserId,
-    departmentId: req.body.departmentId
+    departmentId: req.body.departmentId,
+    createdAt: new Date()
   };
 
   // Save Department Announcement in the database
@@ -43,6 +44,52 @@ exports.findAll = (req, res) => {
     }, {
       model: Department
     }]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Department Announcements."
+      });
+    });
+};
+
+// Retrieve all Recent Department Announcements from the database.
+exports.findAllRecent = (req, res) => {
+  DepartmentAnnouncement.findAll({
+    include: [{
+      model: User
+    }, {
+      model: Department
+    }],
+    order: [["createdAt", "DESC"]],
+    limit: 2
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Department Announcements."
+      });
+    });
+};
+
+// Retrieve all Recent Department Announcements from the database.
+exports.findAllRecentByDeptId = (req, res) => {
+  let deptId = req.params.id
+  DepartmentAnnouncement.findAll({
+    include: [{
+      model: User
+    }, {
+      model: Department,
+      where: {id: deptId}
+    }],
+    order: [["createdAt", "DESC"]],
+    limit: 2
   })
     .then(data => {
       res.send(data);

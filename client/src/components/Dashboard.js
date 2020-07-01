@@ -6,6 +6,7 @@ import Calendar from "./Calendar";
 import ExpenseChartsPage from "./ExpenseChartsPage"
 import PaymentChartsPage from "./PaymentChartsPage"
 import RecentApplciations from "./RecentApplications"
+import RecentAnnouncements from './RecentAnnouncements'
 import axios from 'axios'
 
 export default class Dashboard extends Component {
@@ -65,6 +66,7 @@ export default class Dashboard extends Component {
     })
   }
   render() {    
+
     return (
       <div>
         {/* First Row with small info-boxes */}
@@ -122,6 +124,12 @@ export default class Dashboard extends Component {
                 <h3 className="panel-title">Payment Report</h3>
               </div>
               <PaymentChartsPage />
+            </div>
+            <div className="panel panel-default">
+              <div className="panel-heading with-border" style={{"backgroundColor": "#515e73", color: "white"}}>
+                <h3 className="panel-title">Recent Announcements</h3>
+              </div>
+              <RecentAnnouncements />
             </div>
           </div>
         </div>

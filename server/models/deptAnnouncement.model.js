@@ -13,6 +13,10 @@ module.exports = (sequelize, Sequelize) => {
         announcementDescription: {
             type: Sequelize.STRING,
             allowNull: true
+        },
+        createdAt: {
+            type: Sequelize.DATE,
+            allowNull: false
         }
     }, {
         timestamps: false,

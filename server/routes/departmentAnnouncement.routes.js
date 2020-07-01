@@ -11,6 +11,10 @@ router.post('/', withAuth.verifyToken, withAuth.withRoleAdminOrManager, departme
 //Retrieve all Announcement
 router.get('/', withAuth.verifyToken, departmentAnnouncement.findAll)
 
+router.get('/recent', withAuth.verifyToken, withAuth.withRoleAdmin, departmentAnnouncement.findAllRecent)
+
+router.get('/recent/department/:id', withAuth.verifyToken, departmentAnnouncement.findAllRecentByDeptId)
+
 //Retrieve all Announcements of a Department with DepartmentID
 router.get('/department/:id', withAuth.verifyToken, departmentAnnouncement.findAllByDeptId);
 

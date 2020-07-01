@@ -14,6 +14,7 @@ import EmployeeListManager from "./components/manager/EmployeeList";
 import EmployeeAdd from "./components/EmployeeAdd";
 import EmployeeView from './components/EmployeeView'
 import EmployeeViewEmployee from './components/employee/EmployeeView'
+import EmployeeViewManager from './components/manager/EmployeeView'
 import EmployeeEdit from "./components/EmployeeEdit";
 import DepartmentList from "./components/DepartmentList"
 import ApplicationList from "./components/ApplicationList"
@@ -119,7 +120,7 @@ const ManagerContainer = () => (
       <Switch>
         <Route exact path="/" component={withAuth(DashboardManager)} />
         <Route exact path="/employee-list" component={withAuth(EmployeeListManager)} />
-        <Route exact path="/employee-view" component={withAuth(EmployeeView)} />
+        <Route exact path="/employee-view" component={withAuth(EmployeeViewManager)} />
         <Route exact path="/job-list" component={withAuth(JobListManager)} />
         <Route exact path="/application-list" component={withAuth(ApplicationListManager)} />
         <Route exact path="/application" component={withAuth(Application)} />

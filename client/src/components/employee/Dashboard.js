@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import "../../App.css";
 import Calendar from "../Calendar";
 import RecentApplciations from "../employee/RecentApplications"
+import RecentAnnouncements from '../RecentAnnouncementsManagerEmp'
 import EmployeeViewDashboard from './EmployeeViewDashboard'
 
 export default class Dashboard extends Component {
@@ -31,6 +32,12 @@ export default class Dashboard extends Component {
           {/* Calendar */}
           <div className="col-sm-6">
             <EmployeeViewDashboard />
+            <div className="panel panel-default">
+              <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
+                <h3 className="panel-title">Recent Announcements</h3>
+              </div>
+              <RecentAnnouncements />
+            </div>
           </div>
           {/* Expense Report & Recent Applications */}
           <div className="col-md-6">

@@ -14,7 +14,7 @@ exports.create = (req, res) => {
 
   // Create an UserFinancialInformation
   const userFinancialInformation = {
-    employmentType: req.body.employmentTypen,
+    employmentType: req.body.employmentType,
     salaryBasic: req.body.salaryBasic ,
     salaryGross: req.body.salaryGross,
     salaryNet: req.body.salaryNet,

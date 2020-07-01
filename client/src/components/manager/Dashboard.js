@@ -5,6 +5,7 @@ import Infobox from "../infobox";
 import Calendar from "../Calendar";
 import ExpenseChartsPage from "../manager/ExpenseChartsPage"
 import RecentApplciations from "../manager/RecentApplications"
+import RecentAnnouncements from '../RecentAnnouncementsManagerEmp'
 import axios from 'axios'
 
 export default class DashboardManager extends Component {
@@ -92,6 +93,12 @@ export default class DashboardManager extends Component {
                 <h3 className="panel-title">Recent Applications</h3>
               </div>
               <RecentApplciations />
+            </div>
+            <div className="panel panel-default">
+              <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
+                <h3 className="panel-title">Recent Announcements</h3>
+              </div>
+              <RecentAnnouncements />
             </div>
           </div>
         </div>

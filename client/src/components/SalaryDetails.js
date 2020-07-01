@@ -326,8 +326,8 @@ export default class SalaryDetails extends Component {
                                             name="employmentType"
                                         >
                                             <option value="">Choose one...</option>
-                                            <option value="fullTime">Full Time</option>
-                                            <option value="partTime">Part Time</option>
+                                            <option value="Full Time">Full Time</option>
+                                            <option value="Part Time">Part Time</option>
                                         </Form.Control>
                                     </Form.Group>
                                     <Form.Group>
