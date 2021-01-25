@@ -3,70 +3,69 @@ import React, { Component } from "react";
 import "../App.css";
 import Infobox from "./infobox";
 import Calendar from "./Calendar";
-import ExpenseChartsPage from "./ExpenseChartsPage"
-import PaymentChartsPage from "./PaymentChartsPage"
-import RecentApplciations from "./RecentApplications"
-import RecentAnnouncements from './RecentAnnouncements'
-import axios from 'axios'
+import ExpenseChartsPage from "./ExpenseChartsPage";
+import PaymentChartsPage from "./PaymentChartsPage";
+import RecentApplciations from "./RecentApplications";
+import RecentAnnouncements from "./RecentAnnouncements";
+import axios from "axios";
 
 export default class Dashboard extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       totalEmployees: 0,
       totalExpenses: 0,
       totalPayments: 0,
-      recentApplications: []
-    }
+      recentApplications: [],
+    };
   }
 
-
-
   componentDidMount() {
-    // Fetch Employees Total 
+    // Fetch Employees Total
     axios({
-      method: 'get',
-      url: '/api/users/total',
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+      method: "get",
+      url: "/api/users/total",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
-    .then(res => {
-      this.setState({totalEmployees: parseInt(res.data)})
-    })
-    .catch(err => console.log(err))
+      .then((res) => {
+        this.setState({ totalEmployees: parseInt(res.data) });
+      })
+      .catch((err) => console.log(err));
 
     //Fetch Expenses Total
     axios({
-      method: 'get',
-      url: '/api/expenses/year/2020',
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
-    })
-    .then(res => {
-      let array = res.data
-      if(array.length>0){
-        let sum = array.reduce((a, b) => ({expenses: parseInt(a.expenses) + parseInt(b.expenses)}))
-        this.setState({totalExpenses: sum.expenses})
+      method: "get",
+      url: "/api/expenses/year/2021",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      let array = res.data;
+      if (array.length > 0) {
+        let sum = array.reduce((a, b) => ({
+          expenses: parseInt(a.expenses) + parseInt(b.expenses),
+        }));
+        this.setState({ totalExpenses: sum.expenses });
       } else {
       }
-    })
+    });
 
     //Fetch Payments Total
     axios({
-      method: 'get',
-      url: 'api/payments/year/2020',
-      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
-    })
-    .then(res => {
-      let array = res.data
-      if(array.length>0){
-        let sum = array.reduce((a, b) => ({expenses: parseInt(a.expenses) + parseInt(b.expenses)}))
-        this.setState({totalPayments: sum.expenses})
+      method: "get",
+      url: "api/payments/year/2021",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      let array = res.data;
+      if (array.length > 0) {
+        let sum = array.reduce((a, b) => ({
+          expenses: parseInt(a.expenses) + parseInt(b.expenses),
+        }));
+        this.setState({ totalPayments: sum.expenses });
       } else {
       }
-    })
+    });
   }
-  render() {    
-
+  render() {
     return (
       <div>
         {/* First Row with small info-boxes */}
@@ -105,7 +104,10 @@ export default class Dashboard extends Component {
           <div className="col-sm-6">
             <Calendar />
             <div className="panel panel-default">
-              <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
+              <div
+                className="panel-heading with-border"
+                style={{ backgroundColor: "#515e73", color: "white" }}
+              >
                 <h3 className="panel-title">Recent Applications</h3>
               </div>
               <RecentApplciations />
@@ -114,19 +116,28 @@ export default class Dashboard extends Component {
           {/* Expense Report & Recent Applications */}
           <div className="col-md-6">
             <div className="panel panel-default">
-              <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
+              <div
+                className="panel-heading with-border"
+                style={{ backgroundColor: "#515e73", color: "white" }}
+              >
                 <h3 className="panel-title">Expense Report</h3>
               </div>
               <ExpenseChartsPage />
             </div>
             <div className="panel panel-default">
-              <div className="panel-heading with-border" style={{ "backgroundColor": "#515e73", color: "white" }}>
+              <div
+                className="panel-heading with-border"
+                style={{ backgroundColor: "#515e73", color: "white" }}
+              >
                 <h3 className="panel-title">Payment Report</h3>
               </div>
               <PaymentChartsPage />
             </div>
             <div className="panel panel-default">
-              <div className="panel-heading with-border" style={{"backgroundColor": "#515e73", color: "white"}}>
+              <div
+                className="panel-heading with-border"
+                style={{ backgroundColor: "#515e73", color: "white" }}
+              >
                 <h3 className="panel-title">Recent Announcements</h3>
               </div>
               <RecentAnnouncements />
