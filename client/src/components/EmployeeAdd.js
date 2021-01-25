@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import axios from 'axios'
-import moment from 'moment'
+import axios from "axios";
+import moment from "moment";
 
 export default class EmployeeAdd extends Component {
   constructor(props) {
@@ -39,22 +39,22 @@ export default class EmployeeAdd extends Component {
       file: null,
       hasError: false,
       errMsg: "",
-      completed: false
+      completed: false,
     };
   }
 
   componentDidMount() {
     axios({
-      method: 'get',
-      url: '/api/departments',
-      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+      method: "get",
+      url: "/api/departments",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
-    .then(res => {
-      this.setState({departments: res.data})
-    })
-    .catch(err => {
-      console.log(err)
-    })
+      .then((res) => {
+        this.setState({ departments: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   handleChange = (event) => {
@@ -64,134 +64,148 @@ export default class EmployeeAdd extends Component {
     });
   };
 
-  fileSelectedHandler = event => {
+  fileSelectedHandler = (event) => {
     this.setState({
-      file: event.target.files[0]
-    })
-  }
+      file: event.target.files[0],
+    });
+  };
 
   onSubmit = (e) => {
-
-    this.setState({hasError: false, errorMsg: "", completed: false})
+    this.setState({ hasError: false, errorMsg: "", completed: false });
 
     let user = {
       username: this.state.username,
       password: 1234,
-      fullname: this.state.fistname + ' ' + this.state.lastname,
+      fullname: this.state.fistname + " " + this.state.lastname,
       role: this.state.role,
       departmentId: this.state.departmentId,
-      active: 1
-    }
+      active: 1,
+    };
 
-    e.preventDefault()
+    e.preventDefault();
     axios({
-      method: 'post',
-      url: '/api/users',
+      method: "post",
+      url: "/api/users",
       data: user,
-      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
-    .then(res => {
- 
-      let userId = res.data.id
+      .then((res) => {
+        let userId = res.data.id;
 
-      let userPersonalInfo = {
-        dateOfBirth: this.state.dateOfBirth,
-        gender: this.state.gender,
-        maritalStatus: this.state.maritalStatus,
-        fatherName: this.state.fathername,
-        idNumber: this.state.idNumber,
-        address: this.state.address,
-        city: this.state.city,
-        country: this.state.country,
-        mobile: this.state.mobile,
-        phone: this.state.phone,
-        emailAddress: this.state.email,
-        userId: userId
-      }    
-
-      axios({
-        method: 'post',
-        url: '/api/personalInformations',
-        data: userPersonalInfo,
-        headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
-      })
-      .then(res => {
-
-        let userFinancialInfo = {
-          bankName: this.state.bankName,
-          accountName: this.state.accountName,
-          accountNumber: this.state.accountNumber,
-          iban: this.state.iBan,
-          userId: userId
-        }
+        let userPersonalInfo = {
+          dateOfBirth: this.state.dateOfBirth,
+          gender: this.state.gender,
+          maritalStatus: this.state.maritalStatus,
+          fatherName: this.state.fathername,
+          idNumber: this.state.idNumber,
+          address: this.state.address,
+          city: this.state.city,
+          country: this.state.country,
+          mobile: this.state.mobile,
+          phone: this.state.phone,
+          emailAddress: this.state.email,
+          userId: userId,
+        };
 
         axios({
-          method: 'post',
-          url: 'api/financialInformations',
-          data: userFinancialInfo,
-          headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+          method: "post",
+          url: "/api/personalInformations",
+          data: userPersonalInfo,
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
-        .then(res => {
-          let job = {
-            jobTitle: this.state.jobTitle,
-            startDate: this.state.startDate,
-            endDate: this.state.endDate,
-            userId: userId
-          }
-          axios({
-            method: 'post',
-            url: 'api/jobs/',
-            data: job,
-            headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+          .then((res) => {
+            let userFinancialInfo = {
+              bankName: this.state.bankName,
+              accountName: this.state.accountName,
+              accountNumber: this.state.accountNumber,
+              iban: this.state.iBan,
+              userId: userId,
+            };
+
+            axios({
+              method: "post",
+              url: "api/financialInformations",
+              data: userFinancialInfo,
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            })
+              .then((res) => {
+                let job = {
+                  jobTitle: this.state.jobTitle,
+                  startDate: this.state.startDate,
+                  endDate: this.state.endDate,
+                  userId: userId,
+                };
+                axios({
+                  method: "post",
+                  url: "api/jobs/",
+                  data: job,
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                })
+                  .then((res) => {
+                    this.setState({ completed: true });
+                    window.scrollTo(0, 0);
+                  })
+                  .catch((err) => {
+                    this.setState({
+                      hasError: true,
+                      errMsg: err.response.data.message,
+                    });
+                    window.scrollTo(0, 0);
+                  });
+              })
+              .catch((err) => {
+                this.setState({
+                  hasError: true,
+                  errMsg: err.response.data.message,
+                });
+                window.scrollTo(0, 0);
+              });
           })
-          .then(res => {
-            this.setState({completed: true})
-            window.scrollTo(0, 0)
-          })
-          .catch(err => {
-            this.setState({hasError: true, errMsg: err.response.data.message})
-            window.scrollTo(0, 0)
-          })
-        })
-        .catch(err => {
-          this.setState({hasError: true, errMsg: err.response.data.message})
-          window.scrollTo(0, 0)
-        })
+          .catch((err) => {
+            this.setState({
+              hasError: true,
+              errMsg: err.response.data.message,
+            });
+            window.scrollTo(0, 0);
+          });
       })
-      .catch(err => {
-        this.setState({hasError: true, errMsg: err.response.data.message})
-        window.scrollTo(0, 0)
-      })
-    })
-    .catch(err => {
-      this.setState({hasError: true, errMsg: err.response.data.message})
-      window.scrollTo(0, 0)
-    })
-  }
+      .catch((err) => {
+        this.setState({ hasError: true, errMsg: err.response.data.message });
+        window.scrollTo(0, 0);
+      });
+  };
 
   pushDepartments = () => {
-    let items = []
+    let items = [];
     this.state.departments.map((dept, index) => {
-      items.push(<option key={index} value={dept.id}>{dept.departmentName}</option>)
-    })
+      items.push(
+        <option key={index} value={dept.id}>
+          {dept.departmentName}
+        </option>
+      );
+    });
     return items;
-  }
+  };
 
   render() {
     return (
       <Form onSubmit={this.onSubmit}>
         <div className="row">
-
           {this.state.hasError ? (
             <Alert variant="danger" className="m-3" block>
               {this.state.errMsg}
             </Alert>
-          ): 
-          this.state.completed ? (
+          ) : this.state.completed ? (
             <Alert variant="success" className="m-3" block>
               Employee has been inserted.
             </Alert>
-          ) : (<></>)}
+          ) : (
+            <></>
+          )}
 
           {/* Main Card */}
           <Card className="col-sm-12 main-card">
@@ -241,7 +255,9 @@ export default class EmployeeAdd extends Component {
                           <Form.Row>
                             <DatePicker
                               selected={this.state.dateOfBirth}
-                              onChange={dateOfBirth => this.setState({dateOfBirth})}
+                              onChange={(dateOfBirth) =>
+                                this.setState({ dateOfBirth })
+                              }
                               showMonthDropdown
                               showYearDropdown
                               dropdownMode="select"
@@ -319,7 +335,6 @@ export default class EmployeeAdd extends Component {
                             required
                           />
                         </Form.Group>
-
                       </Card.Text>
                     </Card.Body>
                   </Card>
@@ -336,7 +351,7 @@ export default class EmployeeAdd extends Component {
                           <Form.Control
                             type="text"
                             value={this.state.address}
-                            onChange={this.handleChange} 
+                            onChange={this.handleChange}
                             name="address"
                             placeholder="Enter Address"
                             required
@@ -359,12 +374,12 @@ export default class EmployeeAdd extends Component {
                           <Form.Label className="text-muted required">
                             City
                           </Form.Label>
-                          <Form.Control 
-                            type="text" 
+                          <Form.Control
+                            type="text"
                             value={this.state.city}
                             onChange={this.handleChange}
                             name="city"
-                            placeholder="Enter City" 
+                            placeholder="Enter City"
                             required
                           />
                         </Form.Group>
@@ -382,27 +397,25 @@ export default class EmployeeAdd extends Component {
                           />
                         </Form.Group>
                         <Form.Group controlId="formPhone">
-                          <Form.Label className="text-muted">
-                            Phone
-                          </Form.Label>
-                          <Form.Control 
-                            type="text" 
+                          <Form.Label className="text-muted">Phone</Form.Label>
+                          <Form.Control
+                            type="text"
                             value={this.state.phone}
                             onChange={this.handleChange}
-                            name="mobile"
-                            placeholder="Enter Phone" 
+                            name="phone"
+                            placeholder="Enter Phone"
                           />
                         </Form.Group>
                         <Form.Group controlId="formEmail">
                           <Form.Label className="text-muted required">
                             Email
                           </Form.Label>
-                          <Form.Control 
-                            type="text" 
+                          <Form.Control
+                            type="text"
                             value={this.state.email}
                             onChange={this.handleChange}
                             name="email"
-                            placeholder="Enter Email" 
+                            placeholder="Enter Email"
                             required
                           />
                         </Form.Group>
@@ -455,12 +468,12 @@ export default class EmployeeAdd extends Component {
                         </Form.Group>
                         <Form.Group controlId="formIban">
                           <Form.Label className="text-muted">iBan</Form.Label>
-                          <Form.Control 
-                            type="text" 
+                          <Form.Control
+                            type="text"
                             value={this.state.iBan}
                             onChange={this.handleChange}
                             name="iBan"
-                            placeholder="Enter Iban" 
+                            placeholder="Enter Iban"
                           />
                         </Form.Group>
                       </Card.Text>
@@ -509,7 +522,9 @@ export default class EmployeeAdd extends Component {
                             name="departmentId"
                             required
                           >
-                            <option value="" defaultValue>Choose...</option>
+                            <option value="" defaultValue>
+                              Choose...
+                            </option>
                             {this.pushDepartments()}
                           </Form.Control>
                         </Form.Group>
@@ -545,7 +560,9 @@ export default class EmployeeAdd extends Component {
                     <Card.Body>
                       <Card.Text>
                         <Form.Group controlId="formJobTitle">
-                          <Form.Label className="text-muted required">Job Title</Form.Label>
+                          <Form.Label className="text-muted required">
+                            Job Title
+                          </Form.Label>
                           <Form.Control
                             type="text"
                             value={this.state.jobTitle}
@@ -561,7 +578,9 @@ export default class EmployeeAdd extends Component {
                           <Form.Row>
                             <DatePicker
                               selected={this.state.startDate}
-                              onChange={startDate => this.setState({startDate})}
+                              onChange={(startDate) =>
+                                this.setState({ startDate })
+                              }
                               dropdownMode="select"
                               timeFormat="HH:mm"
                               name="startDate"
@@ -581,7 +600,7 @@ export default class EmployeeAdd extends Component {
                           <Form.Row>
                             <DatePicker
                               selected={this.state.endDate}
-                              onChange={endDate => this.setState({endDate})}
+                              onChange={(endDate) => this.setState({ endDate })}
                               dropdownMode="select"
                               timeFormat="HH:mm"
                               name="endDate"
