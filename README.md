@@ -31,7 +31,7 @@ This Human Resource Management System was made using [React](https://github.com/
   - Expense Management:
     - Add expenses
     - View sumamry of expenses
-  - Storage of environmental variables with [dotenv](https://www.npmjs.com/package/dotenv)
+- Storage of environmental variables with [dotenv](https://www.npmjs.com/package/dotenv)
 
 ## Disclaimer
 
