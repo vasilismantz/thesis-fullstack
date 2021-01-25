@@ -21,17 +21,17 @@ This Human Resource Management System was made using [React](https://github.com/
 - User Password encryption using hashing with [bcrypt.js](https://www.npmjs.com/package/bcryptjs)
 - Responsive design and use of [Bootstrap](https://getbootstrap.com/)
 - Ability to Manage, Add, Update, Delete:
-- Users (Admin, Manager, Employee)
-- Departmens
-- Job positions
-- Applications (leave of absence...)
-- Payroll Management:
-  - Salary details per Employee
-  - Record payment history
-- Expense Management:
-  - Add expenses
-  - View sumamry of expenses
-- Storage of environmental variables with [dotenv](https://www.npmjs.com/package/dotenv)
+  - Users (Admin, Manager, Employee)
+  - Departmens
+  - Job positions
+  - Applications (leave of absence...)
+  - Payroll Management:
+    - Salary details per Employee
+    - Record payment history
+  - Expense Management:
+    - Add expenses
+    - View sumamry of expenses
+  - Storage of environmental variables with [dotenv](https://www.npmjs.com/package/dotenv)
 
 ## Disclaimer
 
