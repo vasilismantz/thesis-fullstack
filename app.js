@@ -3,7 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var withAuth = require("../withAuth");
+var withAuth = require("./withAuth");
 
 const db = require("./models");
 require("dotenv").config();
