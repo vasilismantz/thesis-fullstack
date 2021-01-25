@@ -6,12 +6,10 @@ var app = express();
 var withAuth = require("../withAuth");
 
 /* GET home page. */
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-  );
-}
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" }); //res.render('index', { title: 'Express' });
+  res.status(404).send({ message: "Navigate to /api for documentation" });
+});
 
 router.get("/checkToken", withAuth.checkToken);
 
