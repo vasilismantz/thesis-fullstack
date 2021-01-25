@@ -1,6 +1,5 @@
 <h1 align="center">
-  <h1 align="center">
-  <a style="text-decoration: none; color: white;" href="https://todolist1.vercel.app" target="_blank" rel="noreferrer"> Human Resource Management System </a>ℹ️
+  <a style="text-decoration: none; color: white;" href="https://mantzaris-thesis.herokuapp.com/" target="_blank" rel="noreferrer"> Human Resource Management System </a>ℹ️
   <br>
 </h1>
 
