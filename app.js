@@ -34,8 +34,6 @@ app.use(express.static(path.join(__dirname, "public")));
 //   optionsSuccessStatus: 200
 // }
 
-app.use();
-
 db.sequelize.sync({ alter: true });
 
 // db.sequelize.sync({ force: true }).then(() => {
