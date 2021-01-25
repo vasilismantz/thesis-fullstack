@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var withAuth = require("../withAuth");
 
 const db = require("./models");
 require("dotenv").config();
@@ -39,6 +40,8 @@ db.sequelize.sync({ alter: true });
 app.use("/api", api);
 app.use("/login", login);
 app.use("/register", register);
+
+app.get("/checkToken", withAuth.checkToken);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
